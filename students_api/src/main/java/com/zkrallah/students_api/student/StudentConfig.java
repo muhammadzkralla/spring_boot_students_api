@@ -13,21 +13,21 @@ import static java.time.Month.FEBRUARY;
 @Configuration
 public class StudentConfig {
 
-    @Bean
-    CommandLineRunner commandLineRunner(StudentRepository repository) {
-        return args -> {
-            Student student1 = new Student(
-                    "Zkrallah",
-                    "zkrallah@gmail.com",
-                    LocalDate.of(2004, FEBRUARY, 22)
-            );
-            Student student2 = new Student(
-                    "Zkr",
-                    "zkr@gmail.com",
-                    LocalDate.of(2002, APRIL, 23)
-            );
-
-            repository.saveAll(List.of(student1, student2));
-        };
-    }
+//    @Bean
+//    CommandLineRunner commandLineRunner(StudentRepository repository) {
+//        return args -> {
+//            Student student1 = new Student(
+//                    "Zkrallah",
+//                    "zkrallah@gmail.com",
+//                    LocalDate.of(2004, FEBRUARY, 22)
+//            );
+//            Student student2 = new Student(
+//                    "Zkr",
+//                    "zkr@gmail.com",
+//                    LocalDate.of(2002, APRIL, 23)
+//            );
+//
+//            repository.saveAll(List.of(student1, student2));
+//        };
+//    }
 }
