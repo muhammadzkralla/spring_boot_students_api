@@ -1,4 +1,4 @@
-package com.zkrallah.students_api.student;
+package com.zkrallah.students_api.entity;
 
 import jakarta.persistence.*;
 

@@ -1,5 +1,7 @@
-package com.zkrallah.students_api.student;
+package com.zkrallah.students_api.service;
 
+import com.zkrallah.students_api.entity.Student;
+import com.zkrallah.students_api.repository.StudentRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

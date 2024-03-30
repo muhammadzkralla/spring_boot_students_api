@@ -1,5 +1,7 @@
-package com.zkrallah.students_api.student;
+package com.zkrallah.students_api.controller;
 
+import com.zkrallah.students_api.entity.Student;
+import com.zkrallah.students_api.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
