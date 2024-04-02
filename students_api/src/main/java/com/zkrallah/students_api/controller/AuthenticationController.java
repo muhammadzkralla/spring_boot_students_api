@@ -39,7 +39,21 @@ public class AuthenticationController {
 
     @PostMapping("/admin/signup")
     public ResponseEntity<User> adminRegister(@RequestBody RegisterUserDto registerUserDto) {
-        User registeredUser = authenticationService.signupAdmin(registerUserDto);
+        User registeredUser = authenticationService.signup(registerUserDto, "ADMIN");
+
+        return ResponseEntity.ok(registeredUser);
+    }
+
+    @PostMapping("/teacher/signup")
+    public ResponseEntity<User> teacherRegister(@RequestBody RegisterUserDto registerUserDto) {
+        User registeredUser = authenticationService.signup(registerUserDto, "TEACHER");
+
+        return ResponseEntity.ok(registeredUser);
+    }
+
+    @PostMapping("/student/signup")
+    public ResponseEntity<User> studentRegister(@RequestBody RegisterUserDto registerUserDto) {
+        User registeredUser = authenticationService.signup(registerUserDto, "STUDENT");
 
         return ResponseEntity.ok(registeredUser);
     }

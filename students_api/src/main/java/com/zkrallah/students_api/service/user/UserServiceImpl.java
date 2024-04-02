@@ -41,6 +41,12 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public List<User> getUsersWithRole(String roleName) {
+        Role role = roleRepository.findByName(roleName).orElseThrow(() -> new RuntimeException("Role not found: " + roleName));
+        return userRepository.findByRolesContaining(role);
+    }
+
+    @Override
     public List<User> getUsers() {
         return userRepository.findAll();
     }

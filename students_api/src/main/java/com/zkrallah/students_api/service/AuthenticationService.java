@@ -20,19 +20,6 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    public User signupAdmin(RegisterUserDto input) {
-        User user = new User();
-        Role adminRole = roleRepository.findByName("ADMIN").orElseThrow();
-
-        user.setEmail(input.getEmail());
-        user.setPassword(passwordEncoder.encode(input.getPassword()));
-        user.setFirstName(input.getFirstName());
-        user.setLastName(input.getLastName());
-        user.getRoles().add(adminRole);
-
-        return userRepository.save(user);
-    }
-
     public User authenticate(LoginUserDto loginUserDto) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -43,5 +30,18 @@ public class AuthenticationService {
 
         return userRepository.findByEmail(loginUserDto.getEmail())
                 .orElseThrow();
+    }
+
+    public User signup(RegisterUserDto input, String role) {
+        User user = new User();
+        Role adminRole = roleRepository.findByName(role).orElseThrow();
+
+        user.setEmail(input.getEmail());
+        user.setPassword(passwordEncoder.encode(input.getPassword()));
+        user.setFirstName(input.getFirstName());
+        user.setLastName(input.getLastName());
+        user.getRoles().add(adminRole);
+
+        return userRepository.save(user);
     }
 }

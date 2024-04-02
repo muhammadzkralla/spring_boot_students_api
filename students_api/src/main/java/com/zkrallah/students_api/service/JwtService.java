@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -31,6 +32,8 @@ public class JwtService {
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
+                .claim("roles", userDetails.getAuthorities())
+                .setId(UUID.randomUUID().toString())
                 .signWith(getKey(), SignatureAlgorithm.HS512)
                 .compact();
     }
