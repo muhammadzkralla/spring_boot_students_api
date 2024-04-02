@@ -21,7 +21,7 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String username;
+    private String email;
 
     @Column(nullable = false)
     private String password;
@@ -31,9 +31,6 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     private String lastName;
-
-    @Column(unique = true, nullable = false)
-    private String email;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -48,6 +45,11 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 
     @Override
