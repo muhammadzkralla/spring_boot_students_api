@@ -21,15 +21,8 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final JwtService jwtService;
 
-    @PostMapping("/admin/signup")
-    public ResponseEntity<User> adminRegister(@RequestBody RegisterUserDto registerUserDto) {
-        User registeredUser = authenticationService.signup(registerUserDto);
-
-        return ResponseEntity.ok(registeredUser);
-    }
-
-    @PostMapping("/admin/login")
-    public ResponseEntity<LoginResponse> adminLogin(@RequestBody LoginUserDto loginUserDto) {
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginUserDto loginUserDto) {
         User authenticatedUser = authenticationService.authenticate(loginUserDto);
 
         String accessToken = jwtService.generateAccessToken(authenticatedUser);
@@ -42,6 +35,13 @@ public class AuthenticationController {
         loginResponse.setRefreshTokenExpiresIn(jwtService.getRefreshTokenExpiration());
 
         return ResponseEntity.ok(loginResponse);
+    }
+
+    @PostMapping("/admin/signup")
+    public ResponseEntity<User> adminRegister(@RequestBody RegisterUserDto registerUserDto) {
+        User registeredUser = authenticationService.signupAdmin(registerUserDto);
+
+        return ResponseEntity.ok(registeredUser);
     }
 
 }
