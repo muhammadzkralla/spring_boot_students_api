@@ -1,6 +1,7 @@
 package com.zkrallah.students_api.filter;
 
 import com.zkrallah.students_api.service.JwtService;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @Component
 @RequiredArgsConstructor
@@ -61,6 +63,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
             filterChain.doFilter(request, response);
+        } catch (ExpiredJwtException e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            PrintWriter out = response.getWriter();
+            out.println("{\"message\":\"" + e.getMessage() + "\"}");
+            log.error("Token Expired: " + e.getMessage());
         } catch (Exception e) {
             log.error("JwtAuthenticationFilterError" + e.getMessage());
             e.printStackTrace();
