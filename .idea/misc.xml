@@ -5,6 +5,13 @@
     <option name="description" value="" />
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/students_api/pom.xml" />
+      </list>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="17" project-jdk-type="JavaSDK" />
   <component name="ProjectType">
     <option name="id" value="jpab" />
