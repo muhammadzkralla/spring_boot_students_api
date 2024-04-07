@@ -1,5 +1,6 @@
 HELP.md
 students_api/src/main/resources/application.yml
+students_api/target/classes/application.yml
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
