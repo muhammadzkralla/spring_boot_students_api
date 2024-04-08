@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.text.SimpleDateFormat;
+
 @Configuration
 public class ApplicationConfig {
     private final UserRepository userRepository;
@@ -49,5 +51,10 @@ public class ApplicationConfig {
         authProvider.setPasswordEncoder(passwordEncoder());
 
         return authProvider;
+    }
+
+    @Bean
+    SimpleDateFormat simpleDateFormat() {
+        return new SimpleDateFormat("dd-M-yyyy hh:mm a");
     }
 }

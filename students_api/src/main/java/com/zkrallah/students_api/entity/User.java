@@ -33,6 +33,24 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String lastName;
 
+    @Column
+    private String imageUrl;
+
+    @Column
+    private String createdAt;
+
+    @Column
+    private String dob;
+
+    @Column
+    private int code;
+
+    @Column
+    private String codeExpiredAt;
+
+    @Column
+    private boolean isEmailVerified;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
