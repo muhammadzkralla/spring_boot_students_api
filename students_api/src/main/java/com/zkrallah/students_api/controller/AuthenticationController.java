@@ -18,42 +18,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 @Slf4j
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
-
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginUserDto loginUserDto) {
-        try {
-            LoginResponse loginResponse = authenticationService.login(loginUserDto);
-            return ResponseEntity.ok(loginResponse);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MessageResponse("Failed to login: " + e.getMessage()));
-        }
-    }
-
-    @GetMapping("/token/refresh")
-    public ResponseEntity<?> refreshToken(@RequestHeader("Authorization") String authorizationHeader) {
-        try {
-            LoginResponse loginResponse = authenticationService.refreshToken(authorizationHeader);
-            if (loginResponse == null) throw new NullPointerException();
-            return ResponseEntity.ok().body(loginResponse);
-        } catch (NullPointerException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MessageResponse("Bad Request: " + e.getMessage()));
-        } catch (ExpiredJwtException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new MessageResponse("Refresh Token Expired: " + e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MessageResponse("Unexpected Error: " + e.getMessage()));
-        }
-    }
-
 
     @PostMapping("/admin/signup")
     public ResponseEntity<?> adminRegister(@RequestBody RegisterUserDto registerUserDto) {
@@ -88,8 +58,7 @@ public class AuthenticationController {
         }
     }
 
-
-    @PostMapping("/verify/code")
+    @PostMapping("/verify-code")
     public ResponseEntity<MessageResponse> verifyCode(@RequestBody VerifyCodeDto verifyCodeDto) {
         try {
             boolean success = authenticationService.verifyUser(verifyCodeDto);
@@ -107,7 +76,7 @@ public class AuthenticationController {
         }
     }
 
-    @PostMapping("/regenerate/otp")
+    @PostMapping("/regenerate-code")
     public ResponseEntity<MessageResponse> regenerateOtp(@RequestBody RegenerateCodeDto regenerateCodeDto) {
         try {
             authenticationService.regenerateOtp(regenerateCodeDto.getEmail());
@@ -119,6 +88,35 @@ public class AuthenticationController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new MessageResponse("Internal Server Error: " + e.getMessage()));
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginUserDto loginUserDto) {
+        try {
+            LoginResponse loginResponse = authenticationService.login(loginUserDto);
+            return ResponseEntity.ok(loginResponse);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageResponse("Failed to login: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/token-refresh")
+    public ResponseEntity<?> refreshToken(@RequestHeader("Authorization") String authorizationHeader) {
+        try {
+            LoginResponse loginResponse = authenticationService.refreshToken(authorizationHeader);
+            if (loginResponse == null) throw new NullPointerException();
+            return ResponseEntity.ok().body(loginResponse);
+        } catch (NullPointerException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageResponse("Bad Request: " + e.getMessage()));
+        } catch (ExpiredJwtException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MessageResponse("Refresh Token Expired: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageResponse("Unexpected Error: " + e.getMessage()));
         }
     }
 }
