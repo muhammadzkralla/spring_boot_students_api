@@ -1,6 +1,6 @@
 package com.zkrallah.students_api.filter;
 
-import com.zkrallah.students_api.service.JwtService;
+import com.zkrallah.students_api.service.jwt.JwtServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -25,7 +25,7 @@ import java.io.PrintWriter;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final JwtService jwtService;
+    private final JwtServiceImpl jwtService;
     private final UserDetailsService userDetailsService;
 
     @Override

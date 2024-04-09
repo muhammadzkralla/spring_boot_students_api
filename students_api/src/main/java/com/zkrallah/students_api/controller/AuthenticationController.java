@@ -7,7 +7,7 @@ import com.zkrallah.students_api.dtos.VerifyCodeDto;
 import com.zkrallah.students_api.entity.User;
 import com.zkrallah.students_api.response.LoginResponse;
 import com.zkrallah.students_api.response.MessageResponse;
-import com.zkrallah.students_api.service.AuthenticationService;
+import com.zkrallah.students_api.service.auth.AuthenticationService;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,8 @@ public class AuthenticationController {
     public ResponseEntity<?> adminRegister(@RequestBody RegisterUserDto registerUserDto) {
         try {
             User registeredUser = authenticationService.signup(registerUserDto, "ADMIN");
-            return ResponseEntity.ok(registeredUser);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(registeredUser);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new MessageResponse("Failed to register admin user: " + e.getMessage()));
@@ -40,7 +41,8 @@ public class AuthenticationController {
     public ResponseEntity<?> teacherRegister(@RequestBody RegisterUserDto registerUserDto) {
         try {
             User registeredUser = authenticationService.signup(registerUserDto, "TEACHER");
-            return ResponseEntity.ok(registeredUser);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(registeredUser);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new MessageResponse("Failed to register teacher user: " + e.getMessage()));
@@ -51,7 +53,8 @@ public class AuthenticationController {
     public ResponseEntity<?> studentRegister(@RequestBody RegisterUserDto registerUserDto) {
         try {
             User registeredUser = authenticationService.signup(registerUserDto, "STUDENT");
-            return ResponseEntity.ok(registeredUser);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(registeredUser);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new MessageResponse("Failed to register student user: " + e.getMessage()));

@@ -1,4 +1,4 @@
-package com.zkrallah.students_api.service;
+package com.zkrallah.students_api.service.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -17,7 +17,7 @@ import java.util.function.Function;
 
 @Slf4j
 @Service
-public class JwtService {
+public class JwtServiceImpl implements JwtService {
 
     @Value("${spring.application.security.jwt.secret-key}")
     private String secretKey;
@@ -28,6 +28,7 @@ public class JwtService {
     @Value("${spring.application.security.jwt.refresh-token-expiration}")
     private long refreshTokenExpiration;
 
+    @Override
     public String generateAccessToken(UserDetails userDetails) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + accessTokenExpiration);
@@ -42,6 +43,7 @@ public class JwtService {
                 .compact();
     }
 
+    @Override
     public String generateRefreshToken(UserDetails userDetails) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + refreshTokenExpiration);
@@ -54,6 +56,7 @@ public class JwtService {
                 .compact();
     }
 
+    @Override
     public String getEmailFromToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getKey())
@@ -63,6 +66,7 @@ public class JwtService {
                 .getSubject();
     }
 
+    @Override
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(token);
@@ -77,11 +81,12 @@ public class JwtService {
         return Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
+    @Override
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }

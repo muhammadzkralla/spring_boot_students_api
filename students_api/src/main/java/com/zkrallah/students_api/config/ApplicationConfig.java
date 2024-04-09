@@ -1,7 +1,7 @@
 package com.zkrallah.students_api.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zkrallah.students_api.repository.UserRepository;
+import com.zkrallah.students_api.service.user.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,21 +15,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.text.SimpleDateFormat;
 
 @Configuration
+@RequiredArgsConstructor
 public class ApplicationConfig {
-    private final UserRepository userRepository;
-
-    public ApplicationConfig(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Bean
-    public ObjectMapper objectMapper() {
-        return new ObjectMapper();
-    }
+    private final UserService userService;
 
     @Bean
     UserDetailsService userDetailsService() {
-        return username -> userRepository.findByEmail(username)
+        return username -> userService.getUser(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 

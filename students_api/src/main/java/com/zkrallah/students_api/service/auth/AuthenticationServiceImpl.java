@@ -1,13 +1,16 @@
-package com.zkrallah.students_api.service;
+package com.zkrallah.students_api.service.auth;
 
 import com.zkrallah.students_api.dtos.LoginUserDto;
 import com.zkrallah.students_api.dtos.RegisterUserDto;
 import com.zkrallah.students_api.dtos.VerifyCodeDto;
 import com.zkrallah.students_api.entity.Role;
 import com.zkrallah.students_api.entity.User;
-import com.zkrallah.students_api.repository.RoleRepository;
 import com.zkrallah.students_api.response.LoginResponse;
+import com.zkrallah.students_api.service.jwt.JwtService;
+import com.zkrallah.students_api.service.mail.MailSenderService;
+import com.zkrallah.students_api.service.role.RoleService;
 import com.zkrallah.students_api.service.user.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,16 +26,17 @@ import java.util.Random;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class AuthenticationService {
+public class AuthenticationServiceImpl implements AuthenticationService {
 
-    private final RoleRepository roleRepository;
+    private final RoleService roleService;
+    private final UserService userService;
+    private final JwtService jwtService;
+    private final MailSenderService mailSenderService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
-    private final UserService userService;
     private final SimpleDateFormat formatter;
-    private final MailSenderService mailSenderService;
 
+    @Override
     public LoginResponse login(LoginUserDto loginUserDto) {
         User authenticatedUser = authenticate(loginUserDto);
 
@@ -54,13 +58,15 @@ public class AuthenticationService {
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
     }
 
+    @Override
     public User signup(RegisterUserDto registerUserDto, String role) {
         User user = createUserFromDto(registerUserDto);
-        Role userRole = roleRepository.findByName(role).orElseThrow();
+        Role userRole = roleService.getRole(role).orElseThrow();
         user.getRoles().add(userRole);
         String code = Integer.toString(user.getCode());
+        User createdUser = userService.saveUser(user);
         mailSenderService.sendEmail(user.getEmail(), "Verification Code", code);
-        return userService.saveUser(user);
+        return createdUser;
     }
 
     private User createUserFromDto(RegisterUserDto registerUserDto) {
@@ -89,6 +95,7 @@ public class AuthenticationService {
         return random.nextInt(max - min + 1) + min;
     }
 
+    @Override
     public LoginResponse refreshToken(String authHeader) {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
@@ -118,6 +125,8 @@ public class AuthenticationService {
         return loginResponse;
     }
 
+    @Override
+    @Transactional
     public boolean verifyUser(VerifyCodeDto verifyCodeDto) {
         String email = verifyCodeDto.getEmail();
         int code = verifyCodeDto.getCode();
@@ -125,12 +134,13 @@ public class AuthenticationService {
         int verificationCode = user.getCode();
         if (code == verificationCode && !isCodeExpired(user.getCodeExpiredAt())) {
             user.setEmailVerified(true);
-            userService.saveUser(user);
             return true;
         }
         return false;
     }
 
+    @Override
+    @Transactional
     public void regenerateOtp(String email) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + 86400000);
@@ -138,9 +148,9 @@ public class AuthenticationService {
         int newOtp = generateRandomOtp();
         user.setCode(newOtp);
         user.setCodeExpiredAt(formatter.format(expiryDate));
+        user.setEmailVerified(false);
         String code = Integer.toString(user.getCode());
         mailSenderService.sendEmail(user.getEmail(), "Verification Code", code);
-        userService.saveUser(user);
     }
 
     private boolean isCodeExpired(String codeExpiredAt) {

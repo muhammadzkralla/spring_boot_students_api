@@ -1,15 +1,17 @@
-package com.zkrallah.students_api.service;
+package com.zkrallah.students_api.service.mail;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MailSenderService {
-    @Autowired
-    private JavaMailSender mailSender;
+@RequiredArgsConstructor
+public class MailSenderServiceImpl implements MailSenderService {
 
+    private final JavaMailSender mailSender;
+
+    @Override
     public void sendEmail(String toEmail, String subject, String body) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom("muhammad.heshamyt@gmail.com");
