@@ -2,6 +2,7 @@ package com.zkrallah.students_api.service.auth;
 
 import com.zkrallah.students_api.dtos.LoginUserDto;
 import com.zkrallah.students_api.dtos.RegisterUserDto;
+import com.zkrallah.students_api.dtos.ResetPasswordDto;
 import com.zkrallah.students_api.dtos.VerifyCodeDto;
 import com.zkrallah.students_api.entity.Role;
 import com.zkrallah.students_api.entity.User;
@@ -132,7 +133,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         int code = verifyCodeDto.getCode();
         User user = userService.getUser(email).orElseThrow(() -> new NoSuchElementException("User not found"));
         int verificationCode = user.getCode();
-        if (code == verificationCode && !isCodeExpired(user.getCodeExpiredAt())) {
+        if (code == verificationCode && isCodeValid(user.getCodeExpiredAt())) {
             user.setEmailVerified(true);
             return true;
         }
@@ -153,14 +154,31 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         mailSenderService.sendEmail(user.getEmail(), "Verification Code", code);
     }
 
-    private boolean isCodeExpired(String codeExpiredAt) {
+    @Override
+    @Transactional
+    public boolean resetPassword(ResetPasswordDto resetPasswordDto) {
+        String email = resetPasswordDto.getEmail();
+        String newPassword = resetPasswordDto.getPassword();
+        int code = resetPasswordDto.getCode();
+        User user = userService.getUser(email).orElseThrow(() -> new NoSuchElementException("User not found"));
+        int verificationCode = user.getCode();
+        if (code == verificationCode && isCodeValid(user.getCodeExpiredAt())) {
+            user.setPassword(passwordEncoder.encode(newPassword));
+            user.setEmailVerified(true);
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean isCodeValid(String codeExpiredAt) {
         try {
             Date codeExpirationDate = formatter.parse(codeExpiredAt);
             Date currentDate = new Date();
-            return currentDate.after(codeExpirationDate);
+            return !currentDate.after(codeExpirationDate);
         } catch (Exception e) {
             log.error("Error parsing code expiration date: " + e.getMessage());
-            return true; // Default to code expired if parsing fails
+            return false; // Default to code expired if parsing fails
         }
     }
 

@@ -1,9 +1,6 @@
 package com.zkrallah.students_api.controller;
 
-import com.zkrallah.students_api.dtos.LoginUserDto;
-import com.zkrallah.students_api.dtos.RegenerateCodeDto;
-import com.zkrallah.students_api.dtos.RegisterUserDto;
-import com.zkrallah.students_api.dtos.VerifyCodeDto;
+import com.zkrallah.students_api.dtos.*;
 import com.zkrallah.students_api.entity.User;
 import com.zkrallah.students_api.response.LoginResponse;
 import com.zkrallah.students_api.response.MessageResponse;
@@ -120,6 +117,24 @@ public class AuthenticationController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new MessageResponse("Unexpected Error: " + e.getMessage()));
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordDto resetPasswordDto) {
+        try {
+            boolean success = authenticationService.resetPassword(resetPasswordDto);
+            if (success) {
+                return ResponseEntity.ok(new MessageResponse("Password Reset Successfully!"));
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(new MessageResponse("Reset Failed," + " Code Might Be Invalid Or Expired!"));
+            }
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.badRequest().body(new MessageResponse("User not found"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageResponse("Internal Server Error: " + e.getMessage()));
         }
     }
 }
