@@ -4,8 +4,12 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,20 +37,20 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String lastName;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String imageUrl;
 
     @Column
-    private String createdAt;
+    private Timestamp createdAt;
 
     @Column
-    private String dob;
+    private Date dob;
 
     @Column
     private int code;
 
     @Column
-    private String codeExpiredAt;
+    private Timestamp codeExpiredAt;
 
     @Column
     private boolean isEmailVerified;

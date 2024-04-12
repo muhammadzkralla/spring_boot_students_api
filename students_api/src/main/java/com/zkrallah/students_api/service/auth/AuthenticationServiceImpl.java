@@ -19,7 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Random;
@@ -35,7 +35,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final MailSenderService mailSenderService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private final SimpleDateFormat formatter;
 
     @Override
     public LoginResponse login(LoginUserDto loginUserDto) {
@@ -74,14 +73,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         User user = new User();
         Date now = new Date();
         Date codeExpiryDate = new Date(now.getTime() + 86400000);
+        System.out.println(now);
+        System.out.println(codeExpiryDate);
 
         user.setEmail(registerUserDto.getEmail());
         user.setPassword(passwordEncoder.encode(registerUserDto.getPassword()));
         user.setFirstName(registerUserDto.getFirstName());
         user.setLastName(registerUserDto.getLastName());
-        user.setCreatedAt(formatter.format(now));
+        user.setCreatedAt(new Timestamp(now.getTime()));
         user.setCode(generateRandomOtp());
-        user.setCodeExpiredAt(formatter.format(codeExpiryDate));
+        user.setCodeExpiredAt(new Timestamp(codeExpiryDate.getTime()));
         user.setEmailVerified(false);
         return user;
     }
@@ -148,7 +149,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         User user = userService.getUser(email).orElseThrow(() -> new NoSuchElementException("User not found"));
         int newOtp = generateRandomOtp();
         user.setCode(newOtp);
-        user.setCodeExpiredAt(formatter.format(expiryDate));
+        user.setCodeExpiredAt(new Timestamp(expiryDate.getTime()));
         user.setEmailVerified(false);
         String code = Integer.toString(user.getCode());
         mailSenderService.sendEmail(user.getEmail(), "Verification Code", code);
@@ -171,10 +172,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return false;
     }
 
-    private boolean isCodeValid(String codeExpiredAt) {
+    private boolean isCodeValid(Timestamp codeExpiredAt) {
         try {
-            Date codeExpirationDate = formatter.parse(codeExpiredAt);
+            Date codeExpirationDate = new Date(codeExpiredAt.getTime());
             Date currentDate = new Date();
+            System.out.println(currentDate);
+            System.out.println(codeExpirationDate);
             return !currentDate.after(codeExpirationDate);
         } catch (Exception e) {
             log.error("Error parsing code expiration date: " + e.getMessage());
