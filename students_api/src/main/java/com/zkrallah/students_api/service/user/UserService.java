@@ -1,6 +1,5 @@
 package com.zkrallah.students_api.service.user;
 
-import com.zkrallah.students_api.entity.Role;
 import com.zkrallah.students_api.entity.User;
 
 import java.util.List;

@@ -19,6 +19,7 @@ public class MailSenderServiceImpl implements MailSenderService {
         mailMessage.setText(body);
         mailMessage.setSubject(subject);
 
+        // For Testing Environment
         if (false) mailSender.send(mailMessage);
 
         System.out.println("Mail Sent Successfully!");
