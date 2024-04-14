@@ -16,6 +16,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -28,12 +29,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(req -> {
-                    req.requestMatchers("/api/auth/**")
-                            .permitAll()
-                            .anyRequest()
-                            .authenticated();
-                })
+                .authorizeHttpRequests(req -> req.requestMatchers("/api/auth/**")
+                        .permitAll()
+                        .requestMatchers(POST, "/api/admin/**")
+                        .hasAnyAuthority("ADMIN")
+                        .requestMatchers(POST, "/api/admin/**")
+                        .hasAnyRole("ADMIN")
+                        .anyRequest()
+                        .authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

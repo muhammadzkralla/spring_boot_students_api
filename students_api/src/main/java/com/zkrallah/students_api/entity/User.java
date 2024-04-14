@@ -62,7 +62,13 @@ public class User implements UserDetails {
     )
     private Set<Role> roles = new HashSet<>();
 
-    // Additional fields as needed: dateOfBirth, address, etc.
+    @ManyToMany
+    @JoinTable(
+            name = "user_classes",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "class_id")
+    )
+    private Set<Class> classes = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
