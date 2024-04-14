@@ -1,6 +1,7 @@
 package com.zkrallah.students_api.service.classes;
 
 import com.zkrallah.students_api.dtos.CreateClassDto;
+import com.zkrallah.students_api.dtos.UpdateClassDto;
 import com.zkrallah.students_api.entity.Class;
 import com.zkrallah.students_api.entity.User;
 import com.zkrallah.students_api.repository.ClassRepository;
@@ -83,5 +84,36 @@ public class ClassServiceImpl implements ClassService {
         Class _class = classRepository.findById(classId).orElseThrow(() -> new RuntimeException("Class not found"));
 
         user.getClasses().add(_class);
+    }
+
+    @Override
+    @Transactional
+    public void removeUserFromClass(Long userId, Long classId) {
+        User user = userService.getUserById(userId);
+        Class _class = classRepository.findById(classId).orElseThrow(() -> new RuntimeException("Class not found"));
+
+        user.getClasses().remove(_class);
+    }
+
+    @Override
+    @Transactional
+    public Class updateClass(Long classId, UpdateClassDto updateClassDto) {
+        Class _class = classRepository.findById(classId).orElseThrow(() -> new RuntimeException("Class not found"));
+
+        _class.setName(updateClassDto.getName());
+        _class.setDescription(updateClassDto.getDescription());
+
+        return _class;
+    }
+
+    @Override
+    @Transactional
+    public void removeClass(Long classId) {
+        Class _class = classRepository.findById(classId).orElseThrow(() -> new RuntimeException("Class not found"));
+
+        _class.getUsers().forEach(user -> user.getClasses().remove(_class));
+        _class.getUsers().clear();
+
+        classRepository.delete(_class);
     }
 }
