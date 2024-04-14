@@ -2,8 +2,10 @@ package com.zkrallah.students_api.controller;
 
 import com.zkrallah.students_api.dtos.UpdateUserDto;
 import com.zkrallah.students_api.entity.Class;
+import com.zkrallah.students_api.entity.Request;
 import com.zkrallah.students_api.entity.User;
 import com.zkrallah.students_api.response.MessageResponse;
+import com.zkrallah.students_api.service.request.RequestService;
 import com.zkrallah.students_api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,7 +19,9 @@ import java.util.Set;
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UsersController {
+
     private final UserService userService;
+    private final RequestService requestService;
 
     @GetMapping
     public ResponseEntity<List<User>> getUsers() {
@@ -54,6 +58,17 @@ public class UsersController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new MessageResponse("Could not update user: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/{userId}/requests")
+    public ResponseEntity<?> getUserRequests(@PathVariable Long userId) {
+        try {
+            Set<Request> requests = requestService.getUserRequests(userId);
+            return ResponseEntity.ok(requests);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new MessageResponse("Could not get user's requests: " + e.getMessage()));
         }
     }
 }

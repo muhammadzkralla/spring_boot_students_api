@@ -28,4 +28,8 @@ public class Class {
     @JsonIgnore
     @ManyToMany(mappedBy = "classes")
     private Set<User> users = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "requestedClass")
+    private Set<Request> requests = new HashSet<>();
 }
