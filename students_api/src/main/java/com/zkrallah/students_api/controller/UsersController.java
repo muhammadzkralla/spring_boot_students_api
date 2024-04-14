@@ -1,5 +1,6 @@
 package com.zkrallah.students_api.controller;
 
+import com.zkrallah.students_api.dtos.UpdateUserDto;
 import com.zkrallah.students_api.entity.Class;
 import com.zkrallah.students_api.entity.User;
 import com.zkrallah.students_api.response.MessageResponse;
@@ -7,10 +8,7 @@ import com.zkrallah.students_api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
@@ -45,6 +43,17 @@ public class UsersController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new MessageResponse("Could not fetch classes: " + e.getMessage()));
+        }
+    }
+
+    @PutMapping("/update-user/{userId}")
+    public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody  UpdateUserDto updateUser) {
+        try {
+            User updatedUser = userService.updateUser(userId, updateUser);
+            return ResponseEntity.ok(updatedUser);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new MessageResponse("Could not update user: " + e.getMessage()));
         }
     }
 }
