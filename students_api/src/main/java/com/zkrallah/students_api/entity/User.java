@@ -72,6 +72,10 @@ public class User implements UserDetails {
     )
     private Set<Class> classes = new HashSet<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private Set<Request> requests = new HashSet<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
