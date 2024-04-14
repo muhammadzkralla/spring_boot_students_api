@@ -1,5 +1,6 @@
 package com.zkrallah.students_api.service.user;
 
+import com.zkrallah.students_api.dtos.UpdateUserDto;
 import com.zkrallah.students_api.entity.Class;
 import com.zkrallah.students_api.entity.Role;
 import com.zkrallah.students_api.entity.User;
@@ -9,6 +10,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -63,5 +67,19 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<User> getUsers() {
         return userRepository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public User updateUser(Long userId, UpdateUserDto updateUserDto) throws ParseException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+        user.setFirstName(updateUserDto.getFirstName());
+        user.setLastName(updateUserDto.getLastName());
+        user.setImageUrl(updateUserDto.getImageUrl());
+        user.setDob(new Date(simpleDateFormat.parse(updateUserDto.getDob()).getTime()));
+
+        return user;
     }
 }
