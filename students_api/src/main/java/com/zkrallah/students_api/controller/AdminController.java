@@ -1,6 +1,7 @@
 package com.zkrallah.students_api.controller;
 
 import com.zkrallah.students_api.dtos.CreateClassDto;
+import com.zkrallah.students_api.dtos.UpdateClassDto;
 import com.zkrallah.students_api.entity.Class;
 import com.zkrallah.students_api.response.MessageResponse;
 import com.zkrallah.students_api.service.classes.ClassService;
@@ -33,15 +34,49 @@ public class AdminController {
         }
     }
 
+    @PutMapping("/update-class/{classId}")
+    public ResponseEntity<?> updateClass(@PathVariable Long classId, @RequestBody UpdateClassDto updateClassDto) {
+        try {
+            Class _class = classService.updateClass(classId, updateClassDto);
+            return ResponseEntity.ok(_class);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new MessageResponse("Could not update class: " + e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/delete-class/{classId}")
+    public ResponseEntity<?> removeClass(@PathVariable Long classId) {
+        try {
+            classService.removeClass(classId);
+            return ResponseEntity.ok(new MessageResponse("Class Deleted Successfully!"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageResponse("Could not delete class: " + e.getMessage()));
+        }
+    }
+
     @GetMapping("/add/{userId}/to/{classId}")
     public ResponseEntity<?> addUserToClass(@PathVariable Long userId, @PathVariable Long classId) {
         try {
             classService.addUserToClass(userId, classId);
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(new MessageResponse("Done."));
+                    .body(new MessageResponse("User Added to Class."));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new MessageResponse("Failed to add user to class: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/remove/{userId}/from/{classId}")
+    public ResponseEntity<?> removeUserFromClass(@PathVariable Long userId, @PathVariable Long classId) {
+        try {
+            classService.removeUserFromClass(userId, classId);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new MessageResponse("User Removed from Class.."));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageResponse("Failed to remove user from class: " + e.getMessage()));
         }
     }
 

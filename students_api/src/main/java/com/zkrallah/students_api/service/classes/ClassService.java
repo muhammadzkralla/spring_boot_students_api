@@ -1,6 +1,7 @@
 package com.zkrallah.students_api.service.classes;
 
 import com.zkrallah.students_api.dtos.CreateClassDto;
+import com.zkrallah.students_api.dtos.UpdateClassDto;
 import com.zkrallah.students_api.entity.Class;
 import com.zkrallah.students_api.entity.User;
 
@@ -17,4 +18,10 @@ public interface ClassService {
     Set<User> getUsersInClass(Long classId);
 
     void addUserToClass(Long userId, Long classId);
+
+    void removeUserFromClass(Long userId, Long classId);
+
+    Class updateClass(Long classId, UpdateClassDto updateClassDto);
+
+    void removeClass(Long classId);
 }
