@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -22,14 +19,29 @@ public class AdminController {
     private final ClassService classService;
 
     @PostMapping("/create-class")
-    public ResponseEntity<?> createClass(@RequestBody CreateClassDto createClassDto) {
+    public ResponseEntity<?> createClass(
+            @RequestBody CreateClassDto createClassDto,
+            @RequestHeader("Authorization") String authorizationHeader
+    ) {
         try {
-            Class createdClass = classService.createClass(createClassDto);
+            Class createdClass = classService.createClass(createClassDto, authorizationHeader);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(createdClass);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new MessageResponse("Failed to create class: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/add/{userId}/to/{classId}")
+    public ResponseEntity<?> addUserToClass(@PathVariable Long userId, @PathVariable Long classId) {
+        try {
+            classService.addUserToClass(userId, classId);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new MessageResponse("Done."));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageResponse("Failed to add user to class: " + e.getMessage()));
         }
     }
 

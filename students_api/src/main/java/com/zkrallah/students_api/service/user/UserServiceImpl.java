@@ -1,5 +1,6 @@
 package com.zkrallah.students_api.service.user;
 
+import com.zkrallah.students_api.entity.Class;
 import com.zkrallah.students_api.entity.Role;
 import com.zkrallah.students_api.entity.User;
 import com.zkrallah.students_api.repository.UserRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -42,9 +44,20 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
     public List<User> getUsersWithRole(String roleName) {
         Role role = roleService.getRole(roleName).orElseThrow(() -> new RuntimeException("Role not found: " + roleName));
         return userRepository.findByRolesContaining(role).orElseThrow();
+    }
+
+    @Override
+    public Set<Class> getClasses(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        return user.getClasses();
     }
 
     @Override
