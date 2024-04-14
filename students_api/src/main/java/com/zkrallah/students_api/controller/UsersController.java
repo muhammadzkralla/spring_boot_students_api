@@ -6,7 +6,6 @@ import com.zkrallah.students_api.response.MessageResponse;
 import com.zkrallah.students_api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +24,17 @@ public class UsersController {
     @GetMapping
     public ResponseEntity<List<User>> getUsers() {
         return ResponseEntity.ok(userService.getUsers());
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> getUser(@PathVariable Long userId) {
+        try {
+            User user = userService.getUserById(userId);
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new MessageResponse("Could not fetch user: " + e.getMessage()));
+        }
     }
 
     @GetMapping("/{userId}/classes")

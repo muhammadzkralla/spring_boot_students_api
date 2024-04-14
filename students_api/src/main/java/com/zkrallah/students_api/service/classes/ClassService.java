@@ -12,6 +12,8 @@ public interface ClassService {
 
     List<Class> getClasses();
 
+    Class getClassById(Long classId);
+
     Set<User> getUsersInClass(Long classId);
 
     void addUserToClass(Long userId, Long classId);

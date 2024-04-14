@@ -66,6 +66,11 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
+    public Class getClassById(Long classId) {
+        return classRepository.findById(classId).orElseThrow(() -> new RuntimeException("Class not found"));
+    }
+
+    @Override
     public Set<User> getUsersInClass(Long classId) {
         Class _class = classRepository.findById(classId).orElseThrow(() -> new RuntimeException("Class not found"));
         return _class.getUsers();
@@ -74,7 +79,7 @@ public class ClassServiceImpl implements ClassService {
     @Override
     @Transactional
     public void addUserToClass(Long userId, Long classId) {
-        User user = userService.getUserById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userService.getUserById(userId);
         Class _class = classRepository.findById(classId).orElseThrow(() -> new RuntimeException("Class not found"));
 
         user.getClasses().add(_class);

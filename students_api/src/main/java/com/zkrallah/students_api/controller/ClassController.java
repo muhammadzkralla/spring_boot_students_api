@@ -23,8 +23,19 @@ public class ClassController {
     private final ClassService classService;
 
     @GetMapping
-    public ResponseEntity<List<Class>> getUsers() {
+    public ResponseEntity<List<Class>> getClasses() {
         return ResponseEntity.ok(classService.getClasses());
+    }
+
+    @GetMapping("/{classId}")
+    public ResponseEntity<?> getClass(@PathVariable Long classId) {
+        try {
+            Class _class = classService.getClassById(classId);
+            return ResponseEntity.ok(_class);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new MessageResponse("Could not fetch class: " + e.getMessage()));
+        }
     }
 
     @GetMapping("/{classId}/users")
@@ -34,7 +45,7 @@ public class ClassController {
             return ResponseEntity.ok(users);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new MessageResponse("Could not fetch classes: " + e.getMessage()));
+                    .body(new MessageResponse("Could not fetch users: " + e.getMessage()));
         }
     }
 }
