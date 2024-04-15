@@ -5,9 +5,12 @@ import com.zkrallah.students_api.entity.Class;
 import com.zkrallah.students_api.entity.Role;
 import com.zkrallah.students_api.entity.User;
 import com.zkrallah.students_api.repository.UserRepository;
+import com.zkrallah.students_api.service.classes.ClassService;
 import com.zkrallah.students_api.service.role.RoleService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -24,6 +27,9 @@ public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
     private final RoleService roleService;
+    @Lazy
+    @Autowired
+    private ClassService classService;
 
     @Override
     public User saveUser(User user) {
@@ -59,9 +65,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Set<Class> getClasses(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        return user.getClasses();
+    public Set<User> getUsersInClass(Long classId) {
+        Class _class = classService.getClassById(classId);
+        return _class.getUsers();
     }
 
     @Override
