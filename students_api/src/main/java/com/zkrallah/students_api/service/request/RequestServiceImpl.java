@@ -6,6 +6,7 @@ import com.zkrallah.students_api.entity.User;
 import com.zkrallah.students_api.repository.RequestRepository;
 import com.zkrallah.students_api.service.classes.ClassService;
 import com.zkrallah.students_api.service.user.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -62,5 +63,30 @@ public class RequestServiceImpl implements RequestService{
     public Set<Request> getClassRequests(Long classId) {
         Class _class = classService.getClassById(classId);
         return _class.getRequests();
+    }
+
+    @Override
+    @Transactional
+    public Request approveRequest(Long requestId) {
+        Request request = requestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Request not found."));
+
+        User user = request.getUser();
+        Class requestedClass = request.getRequestedClass();
+        classService.addUserToClass(user.getId(), requestedClass.getId());
+        request.setStatus("APPROVED");
+
+        return request;
+    }
+
+    @Override
+    @Transactional
+    public Request declineRequest(Long requestId) {
+        Request request = requestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Request not found."));
+
+        request.setStatus("DECLINED");
+
+        return request;
     }
 }

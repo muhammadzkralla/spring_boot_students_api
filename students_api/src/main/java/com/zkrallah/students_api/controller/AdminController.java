@@ -3,8 +3,10 @@ package com.zkrallah.students_api.controller;
 import com.zkrallah.students_api.dtos.CreateClassDto;
 import com.zkrallah.students_api.dtos.UpdateClassDto;
 import com.zkrallah.students_api.entity.Class;
+import com.zkrallah.students_api.entity.Request;
 import com.zkrallah.students_api.response.MessageResponse;
 import com.zkrallah.students_api.service.classes.ClassService;
+import com.zkrallah.students_api.service.request.RequestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
 
     private final ClassService classService;
+    private final RequestService requestService;
 
     @PostMapping("/create-class")
     public ResponseEntity<?> createClass(
@@ -77,6 +80,28 @@ public class AdminController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new MessageResponse("Failed to remove user from class: " + e.getMessage()));
+        }
+    }
+
+    @PutMapping("/approve-request/{requestId}")
+    public ResponseEntity<?> approveRequest(@PathVariable Long requestId) {
+        try {
+            Request request = requestService.approveRequest(requestId);
+            return ResponseEntity.ok(request);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageResponse("Failed to approve request: " + e.getMessage()));
+        }
+    }
+
+    @PutMapping("/decline-request/{requestId}")
+    public ResponseEntity<?> declineRequest(@PathVariable Long requestId) {
+        try {
+            Request request = requestService.declineRequest(requestId);
+            return ResponseEntity.ok(request);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageResponse("Failed to decline request: " + e.getMessage()));
         }
     }
 

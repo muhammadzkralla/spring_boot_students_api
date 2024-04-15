@@ -15,4 +15,8 @@ public interface RequestService {
     Set<Request> getUserRequests(Long userId);
 
     Set<Request> getClassRequests(Long classId);
+
+    Request approveRequest(Long requestId);
+
+    Request declineRequest(Long requestId);
 }
