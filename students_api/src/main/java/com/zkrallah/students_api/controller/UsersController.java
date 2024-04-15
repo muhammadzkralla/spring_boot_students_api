@@ -5,6 +5,7 @@ import com.zkrallah.students_api.entity.Class;
 import com.zkrallah.students_api.entity.Request;
 import com.zkrallah.students_api.entity.User;
 import com.zkrallah.students_api.response.MessageResponse;
+import com.zkrallah.students_api.service.classes.ClassService;
 import com.zkrallah.students_api.service.request.RequestService;
 import com.zkrallah.students_api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class UsersController {
 
     private final UserService userService;
     private final RequestService requestService;
+    private final ClassService classService;
 
     @GetMapping
     public ResponseEntity<List<User>> getUsers() {
@@ -42,7 +44,7 @@ public class UsersController {
     @GetMapping("/{userId}/classes")
     public ResponseEntity<?> getUserClasses(@PathVariable Long userId) {
         try {
-            Set<Class> classes = userService.getClasses(userId);
+            Set<Class> classes = classService.getUserClasses(userId);
             return ResponseEntity.ok(classes);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

@@ -9,6 +9,8 @@ import com.zkrallah.students_api.service.jwt.JwtService;
 import com.zkrallah.students_api.service.user.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +24,9 @@ public class ClassServiceImpl implements ClassService {
 
     private final ClassRepository classRepository;
     private final JwtService jwtService;
-    private final UserService userService;
+    @Lazy
+    @Autowired
+    private UserService userService;
 
     @Override
     public Class createClass(CreateClassDto createClassDto, String authorizationHeader) {
@@ -72,9 +76,9 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
-    public Set<User> getUsersInClass(Long classId) {
-        Class _class = classRepository.findById(classId).orElseThrow(() -> new RuntimeException("Class not found"));
-        return _class.getUsers();
+    public Set<Class> getUserClasses(Long userId) {
+        User user = userService.getUserById(userId);
+        return user.getClasses();
     }
 
     @Override

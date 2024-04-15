@@ -3,7 +3,6 @@ package com.zkrallah.students_api.service.classes;
 import com.zkrallah.students_api.dtos.CreateClassDto;
 import com.zkrallah.students_api.dtos.UpdateClassDto;
 import com.zkrallah.students_api.entity.Class;
-import com.zkrallah.students_api.entity.User;
 
 import java.util.List;
 import java.util.Set;
@@ -15,7 +14,7 @@ public interface ClassService {
 
     Class getClassById(Long classId);
 
-    Set<User> getUsersInClass(Long classId);
+    Set<Class> getUserClasses(Long userId);
 
     void addUserToClass(Long userId, Long classId);
 

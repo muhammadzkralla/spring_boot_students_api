@@ -1,11 +1,14 @@
 package com.zkrallah.students_api.controller;
 
+import com.zkrallah.students_api.entity.Announcement;
 import com.zkrallah.students_api.entity.Class;
 import com.zkrallah.students_api.entity.Request;
 import com.zkrallah.students_api.entity.User;
 import com.zkrallah.students_api.response.MessageResponse;
+import com.zkrallah.students_api.service.announcement.AnnouncementService;
 import com.zkrallah.students_api.service.classes.ClassService;
 import com.zkrallah.students_api.service.request.RequestService;
+import com.zkrallah.students_api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +27,8 @@ public class ClassController {
 
     private final ClassService classService;
     private final RequestService requestService;
+    private final AnnouncementService announcementService;
+    private final UserService userService;
 
     @GetMapping
     public ResponseEntity<List<Class>> getClasses() {
@@ -42,9 +47,9 @@ public class ClassController {
     }
 
     @GetMapping("/{classId}/users")
-    public ResponseEntity<?> getUserClasses(@PathVariable Long classId) {
+    public ResponseEntity<?> getClassUsers(@PathVariable Long classId) {
         try {
-            Set<User> users = classService.getUsersInClass(classId);
+            Set<User> users = userService.getUsersInClass(classId);
             return ResponseEntity.ok(users);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -53,13 +58,24 @@ public class ClassController {
     }
 
     @GetMapping("/{classId}/requests")
-    public ResponseEntity<?> getUserRequests(@PathVariable Long classId) {
+    public ResponseEntity<?> getClassRequests(@PathVariable Long classId) {
         try {
             Set<Request> requests = requestService.getClassRequests(classId);
             return ResponseEntity.ok(requests);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new MessageResponse("Could not get class's requests: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/{classId}/announcements")
+    public ResponseEntity<?> getClassAnnouncements(@PathVariable Long classId) {
+        try {
+            Set<Announcement> requests = announcementService.getAnnouncementsInClass(classId);
+            return ResponseEntity.ok(requests);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new MessageResponse("Could not get class's announcements: " + e.getMessage()));
         }
     }
 }

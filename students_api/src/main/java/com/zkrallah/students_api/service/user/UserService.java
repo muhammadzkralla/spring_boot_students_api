@@ -1,7 +1,6 @@
 package com.zkrallah.students_api.service.user;
 
 import com.zkrallah.students_api.dtos.UpdateUserDto;
-import com.zkrallah.students_api.entity.Class;
 import com.zkrallah.students_api.entity.User;
 
 import java.text.ParseException;
@@ -20,7 +19,7 @@ public interface UserService {
 
     List<User> getUsersWithRole(String roleName);
 
-    Set<Class> getClasses(Long userId);
+    Set<User> getUsersInClass(Long classId);
 
     List<User> getUsers();
 

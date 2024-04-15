@@ -14,13 +14,13 @@ public class StudentsApiApplication {
 		SpringApplication.run(StudentsApiApplication.class, args);
 	}
 
-	@Bean
-	CommandLineRunner run(RoleService roleService) {
-		return args -> {
-			Role role1 = roleService.saveRole(new Role(null, "ADMIN"));
-			Role role2 = roleService.saveRole(new Role(null, "TEACHER"));
-			Role role3 = roleService.saveRole(new Role(null, "STUDENT"));
-		};
-	}
+//	@Bean
+//	CommandLineRunner run(RoleService roleService) {
+//		return args -> {
+//			Role role1 = roleService.saveRole(new Role(null, "ADMIN"));
+//			Role role2 = roleService.saveRole(new Role(null, "TEACHER"));
+//			Role role3 = roleService.saveRole(new Role(null, "STUDENT"));
+//		};
+//	}
 
 }
