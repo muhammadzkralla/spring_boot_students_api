@@ -23,12 +23,10 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "class_id", referencedColumnName = "id")
     private Class requestedClass;
