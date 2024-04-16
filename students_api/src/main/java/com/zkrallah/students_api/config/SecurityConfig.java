@@ -16,7 +16,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -31,10 +30,18 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req.requestMatchers("/api/auth/**")
                         .permitAll()
-                        .requestMatchers(POST, "/api/admin/**")
+                        .requestMatchers( "/api/admin/**")
                         .hasAnyAuthority("ADMIN")
-                        .requestMatchers(POST, "/api/admin/**")
+                        .requestMatchers( "/api/admin/**")
                         .hasAnyRole("ADMIN")
+                        .requestMatchers( "/api/teacher/**")
+                        .hasAnyAuthority("TEACHER")
+                        .requestMatchers( "/api/teacher/**")
+                        .hasAnyRole("TEACHER")
+                        .requestMatchers( "/api/students/**")
+                        .hasAnyAuthority("STUDENT")
+                        .requestMatchers( "/api/students/**")
+                        .hasAnyRole("STUDENT")
                         .anyRequest()
                         .authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

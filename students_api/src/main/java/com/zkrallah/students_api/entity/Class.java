@@ -36,4 +36,8 @@ public class Class {
     @JsonIgnore
     @OneToMany(mappedBy = "targetedClass")
     private Set<Announcement> announcements = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "targetedClass")
+    private Set<Task> tasks = new HashSet<>();
 }
