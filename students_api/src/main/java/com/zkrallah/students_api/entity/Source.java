@@ -24,6 +24,6 @@ public class Source {
     @JoinColumn(name = "task_id", referencedColumnName = "id")
     private Task task;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String source;
 }
