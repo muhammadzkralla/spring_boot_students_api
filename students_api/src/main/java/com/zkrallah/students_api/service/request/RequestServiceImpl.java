@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -27,6 +28,10 @@ public class RequestServiceImpl implements RequestService{
     public Request createRequest(Long userId, Long classID) {
         User user = userService.getUserById(userId);
         Class requestedClass = classService.getClassById(classID);
+        Optional<Request> request = requestRepository.findByUserAndRequestedClass(user, requestedClass);
+        if (request.isPresent()) {
+            throw new IllegalStateException("Request Already Exists!");
+        }
 
         return requestRepository.save(createNewRequest(user, requestedClass));
     }
