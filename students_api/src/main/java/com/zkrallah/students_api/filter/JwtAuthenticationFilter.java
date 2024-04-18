@@ -1,5 +1,6 @@
 package com.zkrallah.students_api.filter;
 
+import com.zkrallah.students_api.entity.User;
 import com.zkrallah.students_api.service.jwt.JwtServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
@@ -51,6 +52,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
                 if (jwtService.validateToken(jwt)) {
+                    User user = (User) userDetails;
+                    if (!user.isEmailVerified()) {
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        PrintWriter out = response.getWriter();
+                        out.println("{\n\"message\":\"User email is not verified.\"\n}");
+                        log.error("User Email Is Not Verified!");
+                        return;
+                    }
+
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
                             null,
