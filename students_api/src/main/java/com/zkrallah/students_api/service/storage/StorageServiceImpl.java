@@ -23,17 +23,25 @@ import java.util.UUID;
 @Slf4j
 public class StorageServiceImpl implements StorageService {
 
-    private String uploadFile(File file, String fileName) throws IOException {
-        BlobId blobId = BlobId.of("spring-students-system.appspot.com", fileName);
-        BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("media").build();
-        InputStream inputStream = StorageServiceImpl.class.getClassLoader().getResourceAsStream("spring-students-system-firebase-adminsdk-e56uv-78baed1398.json");
-        assert inputStream != null;
-        Credentials credentials = GoogleCredentials.fromStream(inputStream);
-        Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
-        storage.create(blobInfo, Files.readAllBytes(file.toPath()));
+    private static final String CREDENTIALS_FILE_PATH = "spring-students-system-firebase-adminsdk-e56uv-78baed1398.json";
 
-        String DOWNLOAD_URL = "https://firebasestorage.googleapis.com/v0/b/spring-students-system.appspot.com/o/%s?alt=media";
-        return String.format(DOWNLOAD_URL, URLEncoder.encode(fileName, StandardCharsets.UTF_8));
+    private String uploadFile(File file, String fileName) throws IOException {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(CREDENTIALS_FILE_PATH)) {
+            if (inputStream == null) {
+                throw new IOException("Credentials file not found: " + CREDENTIALS_FILE_PATH);
+            }
+
+            Credentials credentials = GoogleCredentials.fromStream(inputStream);
+            Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
+
+            BlobId blobId = BlobId.of("spring-students-system.appspot.com", fileName);
+            BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("media").build();
+
+            storage.create(blobInfo, Files.readAllBytes(file.toPath()));
+
+            String DOWNLOAD_URL = "https://firebasestorage.googleapis.com/v0/b/spring-students-system.appspot.com/o/%s?alt=media";
+            return String.format(DOWNLOAD_URL, URLEncoder.encode(fileName, StandardCharsets.UTF_8));
+        }
     }
 
     private File convertToFile(MultipartFile multipartFile, String fileName) throws IOException {
@@ -48,20 +56,26 @@ public class StorageServiceImpl implements StorageService {
         return fileName.substring(fileName.lastIndexOf("."));
     }
 
-
     public String upload(MultipartFile multipartFile) {
         try {
             String fileName = multipartFile.getOriginalFilename();
-            assert fileName != null;
-            fileName = UUID.randomUUID().toString().concat(this.getExtension(fileName));
+            if (fileName == null) {
+                throw new IllegalArgumentException("File name is null");
+            }
+            fileName = UUID.randomUUID().toString().concat(getExtension(fileName));
 
-            File file = this.convertToFile(multipartFile, fileName);
-            String URL = this.uploadFile(file, fileName);
-            boolean delete = file.delete();
-            return URL;
-        } catch (Exception e) {
-            e.printStackTrace();
+            File file = convertToFile(multipartFile, fileName);
+            String url = uploadFile(file, fileName);
+            if (!file.delete()) {
+                log.warn("Failed to delete temporary file: {}", file.getName());
+            }
+            return url;
+        } catch (IOException e) {
+            log.error("Failed to upload image to Firebase Storage", e);
             return "Image couldn't upload, Something went wrong";
+        } catch (IllegalArgumentException e) {
+            log.error("Invalid file name", e);
+            return "Invalid file name";
         }
     }
 }
