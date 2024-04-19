@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MultipartException;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -63,5 +65,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<MessageResponse> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex) {
         String errorMessage = "HTTP request method '" + ex.getMethod() + "' is not supported for this endpoint";
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(new MessageResponse(errorMessage));
+    }
+
+    @ExceptionHandler(MultipartException.class)
+    public ResponseEntity<MessageResponse> handleMultipartException(MultipartException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new MessageResponse("Multipart request error: " + ex.getMessage()));
     }
 }
