@@ -42,3 +42,4 @@ out/
 ### VS Code ###
 .vscode/
 /src/main/resources/application.yml
+/src/main/resources/spring-students-system-firebase-adminsdk-e56uv-78baed1398.json

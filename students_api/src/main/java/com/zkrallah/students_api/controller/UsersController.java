@@ -7,11 +7,14 @@ import com.zkrallah.students_api.entity.User;
 import com.zkrallah.students_api.response.MessageResponse;
 import com.zkrallah.students_api.service.classes.ClassService;
 import com.zkrallah.students_api.service.request.RequestService;
+import com.zkrallah.students_api.service.storage.StorageService;
 import com.zkrallah.students_api.service.user.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Set;
@@ -24,6 +27,7 @@ public class UsersController {
     private final UserService userService;
     private final RequestService requestService;
     private final ClassService classService;
+    private final StorageService storageService;
 
     @GetMapping
     public ResponseEntity<List<User>> getUsers() {
@@ -71,6 +75,20 @@ public class UsersController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new MessageResponse("Could not get user's requests: " + e.getMessage()));
+        }
+    }
+
+    @Transactional
+    @PostMapping("/{userId}/upload-image")
+    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile multipartFile, @PathVariable Long userId) {
+        try {
+            String url = storageService.upload(multipartFile);
+            User user = userService.getUserById(userId);
+            user.setImageUrl(url);
+            return ResponseEntity.ok(new MessageResponse(url));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new MessageResponse("Could not upload user's image: " + e.getMessage()));
         }
     }
 }

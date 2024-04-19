@@ -98,6 +98,13 @@
             <version>3.2.4</version>
         </dependency>
 
+        <!-- Firebase Admin Dependency -->
+        <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>9.1.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>

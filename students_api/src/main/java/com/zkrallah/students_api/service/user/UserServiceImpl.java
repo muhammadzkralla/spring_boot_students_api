@@ -83,7 +83,6 @@ public class UserServiceImpl implements UserService{
 
         user.setFirstName(updateUserDto.getFirstName());
         user.setLastName(updateUserDto.getLastName());
-        user.setImageUrl(updateUserDto.getImageUrl());
         user.setDob(new Date(simpleDateFormat.parse(updateUserDto.getDob()).getTime()));
 
         return user;
