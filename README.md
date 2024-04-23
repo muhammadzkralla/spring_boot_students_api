@@ -4,9 +4,7 @@
 
 This is a RESTful API built with Spring Boot and PostgreSQL for managing students, classes, submissions, requests, and more in a student management system.
 
-## Endpoints
-
-### 1. Authentication
+<h1 align = "center">  Authentication Endpoints </h1> <br>
 
 #### Register User
 
@@ -124,7 +122,7 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 }
 ```
 
-> **Note:** The refresh token must be provided in the request header to receive the new tokens.
+> **Note:** The refresh token must be provided in the request header to receive the response.
 
 #### Reset Password
 
@@ -146,4 +144,93 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 ```
 
 > **Note:** You should request code generation before this request to receive an OTP code via the user's email.
+
+<br><hr>
+
+<h1 align = "center">  Admin Endpoints </h1> <br>
+
+> **Note:** All Admin Endpoints must be called ONLY by Admin users. If a Student or a Teacher tries to do an admin request, you'll receive a 403 Forbidden Response. 
+
+#### Create Class
+
+- **Endpoint:** `/api/admin/create-class`
+- **Method:** `POST`
+- **Request Body:**
+```json
+{
+    "name": "Class Name",
+    "description": "This is the description for The Class."
+}
+```
+- **Response Body**
+```json
+{
+    "id": 4,
+    "name": "Class Name",
+    "description": "This is the description for The Class."
+}
+```
+
+> **Note:** An Admin token must be provided in the request header to receive the response.
+
+#### Update Class
+
+- **Endpoint:** `/api/admin/update-class/{classId}`
+- **Method:** `PUT`
+- **Request Body:**
+```json
+{
+    "name": "Class4",
+    "description": "This is the modified description for class4"
+}
+```
+- **Response Body**
+```json
+{
+    "id": 4,
+    "name": "Class4",
+    "description": "This is the modified description for class4"
+}
+```
+
+> **Note:** An Admin token must be provided in the request header to receive the response.
+
+#### Delete Class
+
+- **Endpoint:** `/api/admin/delete-class/{classId}`
+- **Method:** `DELETE`
+- **Response Body**
+```json
+{
+    "message": "Class Deleted Successfully!"
+}
+```
+
+> **Note:** An Admin token must be provided in the request header to receive the response.
+
+#### Add a User to a Class
+
+- **Endpoint:** `/api/admin/add/{userId}/to/{classId}`
+- **Method:** `GET`
+- **Response Body**
+```json
+{
+    "message": "User Added to Class."
+}
+```
+
+> **Note:** An Admin token must be provided in the request header to receive the response.
+
+#### Remove a User from a Class
+
+- **Endpoint:** `/api/admin/remove/{userId}/from/{classId}`
+- **Method:** `GET`
+- **Response Body**
+```json
+{
+    "message": "User Removed from Class.."
+}
+```
+
+> **Note:** An Admin token must be provided in the request header to receive the response.
 
