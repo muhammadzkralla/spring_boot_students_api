@@ -85,7 +85,8 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 }
 ```
 
-> **Note:** The OTP code is sent to the user via email.
+> **Note:** The OTP code is sent to the user via email. <br>
+> **Note:** No User of any role (Admin, Teacher, or Student) would be able to do any request if they did not verify their account.
 
 #### Login
 
@@ -233,4 +234,96 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 ```
 
 > **Note:** An Admin token must be provided in the request header to receive the response.
+
+#### Approve User Request
+
+- **Endpoint:** `/api/admin/approve-request/{requestId}`
+- **Method:** `PUT`
+- **Response Body**
+```json
+{
+    "id": 1,
+    "user": {
+        "id": 3,
+        "email": "muhammad.hesham440@gmail.com",
+        "password": "$2a$10$UZmIpcjMaijPzpzM60lEnOMyijLDP52q0G060TTtdfNxqwlhGOGtK",
+        "firstName": "Muhammad",
+        "lastName": "zkrallah",
+        "imageUrl": "https://firebasestorage.googleapis.com/v0/b/spring-students-system.appspot.com/o/50ce094e-f130-4340-ac06-0115900f0bde.png?alt=media",
+        "createdAt": "2024-04-18T17:11:55.769+00:00",
+        "dob": null,
+        "code": 393381,
+        "codeExpiredAt": "2024-04-20T20:29:18.239+00:00",
+        "enabled": true,
+        "username": "muhammad.hesham440@gmail.com",
+        "emailVerified": true,
+        "authorities": [
+            {
+                "id": 3,
+                "name": "STUDENT",
+                "authority": "STUDENT"
+            }
+        ],
+        "accountNonExpired": true,
+        "credentialsNonExpired": true,
+        "accountNonLocked": true
+    },
+    "requestedClass": {
+        "id": 1,
+        "name": "Class1",
+        "description": "This is the description for Class1."
+    },
+    "status": "APPROVED",
+    "timestamp": "2024-04-24T01:22:27.698+00:00"
+}
+```
+
+> **Note:** An Admin token must be provided in the request header to receive the response.
+
+#### Decline User Request
+
+- **Endpoint:** `/api/admin/decline-request/{requestId}`
+- **Method:** `PUT`
+- **Response Body**
+```json
+{
+    "id": 1,
+    "user": {
+        "id": 3,
+        "email": "muhammad.hesham440@gmail.com",
+        "password": "$2a$10$UZmIpcjMaijPzpzM60lEnOMyijLDP52q0G060TTtdfNxqwlhGOGtK",
+        "firstName": "Muhammad",
+        "lastName": "zkrallah",
+        "imageUrl": "https://firebasestorage.googleapis.com/v0/b/spring-students-system.appspot.com/o/50ce094e-f130-4340-ac06-0115900f0bde.png?alt=media",
+        "createdAt": "2024-04-18T17:11:55.769+00:00",
+        "dob": null,
+        "code": 393381,
+        "codeExpiredAt": "2024-04-20T20:29:18.239+00:00",
+        "enabled": true,
+        "username": "muhammad.hesham440@gmail.com",
+        "emailVerified": true,
+        "authorities": [
+            {
+                "id": 3,
+                "name": "STUDENT",
+                "authority": "STUDENT"
+            }
+        ],
+        "accountNonExpired": true,
+        "credentialsNonExpired": true,
+        "accountNonLocked": true
+    },
+    "requestedClass": {
+        "id": 1,
+        "name": "Class1",
+        "description": "This is the description for Class1."
+    },
+    "status": "DECLINED",
+    "timestamp": "2024-04-24T01:22:27.698+00:00"
+}
+```
+
+> **Note:** An Admin token must be provided in the request header to receive the response.
+
+<br><hr>
 
