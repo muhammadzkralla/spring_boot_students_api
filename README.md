@@ -2,7 +2,19 @@
 
 ## Description
 
-This is a RESTful API built with Spring Boot and PostgreSQL for managing students, classes, submissions, requests, and more in a student management system.
+This is a RESTful API built with Spring Boot and PostgreSQL for managing students, classes, submissions, requests, and more in a student management system. <br>
+
+
+> **Please Note That:**  <br> <br>
+> • Any user should be authenticated and send their JWT access token to receive a response. <br> <br>
+> • Any user should verify their email to be able to make a request. <br> <br>
+> • The JWT access token must be valid and not expired, if it is expired, you should request to refresh token or login again. <br> <br>
+> • All Admin Endpoints must be called ONLY by Admin users. If a Student or a Teacher tries to do an admin request,
+>  they will receive a 403 Forbidden Response. <br> <br>
+> • All Teacher Endpoints must be called ONLY by Teacher users. If a Student or an Admin tries to do an admin request,
+>  they will receive a 403 Forbidden Response. <br> <br>
+> • All Student Endpoints must be called ONLY by Student users. If a Teacher or an Admin tries to do an admin request,
+>  they will receive a 403 Forbidden Response. <br> <br>
 
 <h1 align = "center">  Authentication Endpoints </h1> <br>
 
