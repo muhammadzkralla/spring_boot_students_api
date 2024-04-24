@@ -9,11 +9,11 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 > • Any user should be authenticated and send their JWT access token to receive a response. <br> <br>
 > • Any user should verify their email to be able to make a request. <br> <br>
 > • The JWT access token must be valid and not expired, if it is expired, you should request to refresh token or login again. <br> <br>
-> • All Admin Endpoints must be called ONLY by Admin users. If a Student or a Teacher tries to do an admin request,
+> • All Admin Endpoints must be called ONLY by Admin users. If a Student or a Teacher tries to make an admin request,
 >  they will receive a 403 Forbidden Response. <br> <br>
-> • All Teacher Endpoints must be called ONLY by Teacher users. If a Student or an Admin tries to do an admin request,
+> • All Teacher Endpoints must be called ONLY by Teacher users. If a Student or an Admin tries to make an admin request,
 >  they will receive a 403 Forbidden Response. <br> <br>
-> • All Student Endpoints must be called ONLY by Student users. If a Teacher or an Admin tries to do an admin request,
+> • All Student Endpoints must be called ONLY by Student users. If a Teacher or an Admin tries to make an admin request,
 >  they will receive a 403 Forbidden Response. <br> <br>
 
 <h1 align = "center">  Authentication Endpoints </h1> <br>
@@ -159,6 +159,177 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 > **Note:** You should request code generation before this request to receive an OTP code via the user's email.
 
 <br><hr>
+
+<h1 align = "center">  User Endpoints </h1> <br>
+
+#### Get All Users
+
+- **Endpoint:** `/api/users`
+- **Method:** `GET`
+- **Response Body:** list of users
+
+#### Get a Certain User
+
+- **Endpoint:** `/api/users/{userId}`
+- **Method:** `GET`
+- **Response Body**
+```json
+{
+    "id": 1,
+    "email": "muhammad.hesham442@gmail.com",
+    "password": "$2a$10$ZsfxMKPoptP4HhoLGEXnauwU0v5mbM949q9zYM.ulrrO.zuhsj7Te",
+    "firstName": "Muhammad",
+    "lastName": "zkrallah",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/spring-students-system.appspot.com/o/5aae8217-9e87-42d9-9a27-542f06cb48d5.jpeg?alt=media",
+    "createdAt": "2024-04-18T17:11:41.016+00:00",
+    "dob": null,
+    "code": 257199,
+    "codeExpiredAt": "2024-04-19T17:11:41.016+00:00",
+    "enabled": true,
+    "username": "muhammad.hesham442@gmail.com",
+    "emailVerified": true,
+    "authorities": [
+        {
+            "id": 1,
+            "name": "ADMIN",
+            "authority": "ADMIN"
+        }
+    ],
+    "accountNonExpired": true,
+    "credentialsNonExpired": true,
+    "accountNonLocked": true
+}
+```
+
+#### Get Classes of a User
+
+- **Endpoint:** `/api/users/{userId}/classes`
+- **Method:** `GET`
+- **Response Body**
+```json
+[
+    {
+        "id": 1,
+        "name": "Class1",
+        "description": "This is the description for Class1."
+    },
+    {
+        "id": 2,
+        "name": "Class2",
+        "description": "This is the description for Class2."
+    },
+    {
+        "id": 3,
+        "name": "Class3",
+        "description": "This is the description for Class3."
+    },
+    {
+        "id": 5,
+        "name": "Class Name1",
+        "description": "This is the description for The Class."
+    }
+]
+```
+
+#### Update User
+
+- **Endpoint:** `/api/admin/update-class/{classId}`
+- **Method:** `PUT`
+- **Request Body:**
+```json
+{
+    "firstName": "Muhammad",
+    "lastName": "zkrallaaaah",
+    "dob": "22-2-2004"
+}
+```
+- **Response Body**
+```json
+{
+    "id": 2,
+    "email": "muhammad.hesham441@gmail.com",
+    "password": "$2a$10$rvrF4OSYuojarYaKZhZnDe7kbuvHplFWy0zNffGmAgep9D2Lk9eLO",
+    "firstName": "Muhammad",
+    "lastName": "zkrallaaaah",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/spring-students-system.appspot.com/o/668adaea-1e80-460c-9660-2015e3830bc2.jpeg?alt=media",
+    "createdAt": "2024-04-18T17:11:49.487+00:00",
+    "dob": "2004-02-22",
+    "code": 738239,
+    "codeExpiredAt": "2024-04-19T17:11:49.487+00:00",
+    "enabled": true,
+    "username": "muhammad.hesham441@gmail.com",
+    "emailVerified": true,
+    "authorities": [
+        {
+            "id": 2,
+            "name": "TEACHER",
+            "authority": "TEACHER"
+        }
+    ],
+    "accountNonExpired": true,
+    "credentialsNonExpired": true,
+    "accountNonLocked": true
+}
+```
+
+#### Get Requests of a User
+
+- **Endpoint:** `/api/users/{userId}/requests`
+- **Method:** `GET`
+- **Response Body**
+```json
+[
+    {
+        "id": 1,
+        "user": {
+            "id": 3,
+            "email": "muhammad.hesham440@gmail.com",
+            "password": "$2a$10$UZmIpcjMaijPzpzM60lEnOMyijLDP52q0G060TTtdfNxqwlhGOGtK",
+            "firstName": "Muhammad",
+            "lastName": "zkrallah",
+            "imageUrl": "https://firebasestorage.googleapis.com/v0/b/spring-students-system.appspot.com/o/50ce094e-f130-4340-ac06-0115900f0bde.png?alt=media",
+            "createdAt": "2024-04-18T17:11:55.769+00:00",
+            "dob": null,
+            "code": 393381,
+            "codeExpiredAt": "2024-04-20T20:29:18.239+00:00",
+            "enabled": true,
+            "username": "muhammad.hesham440@gmail.com",
+            "emailVerified": true,
+            "authorities": [
+                {
+                    "id": 3,
+                    "name": "STUDENT",
+                    "authority": "STUDENT"
+                }
+            ],
+            "accountNonExpired": true,
+            "credentialsNonExpired": true,
+            "accountNonLocked": true
+        },
+        "requestedClass": {
+            "id": 1,
+            "name": "Class1",
+            "description": "This is the description for Class1."
+        },
+        "status": "APPROVED",
+        "timestamp": "2024-04-24T01:22:27.698+00:00"
+    }
+]
+```
+
+#### Upload Profile Photo
+
+- **Endpoint:** `/api/users/{userId}/upload-image`
+- **Method:** `POST`
+- **Response Body**
+```json
+{
+    "message": "https://firebasestorage.googleapis.com/v0/b/spring-students-system.appspot.com/o/a163d0ea-2c1f-413c-b65f-217a23d78fb6.jpeg?alt=media"
+}
+```
+
+> **Note:** This is a MULTIPART request, this meaning that you should pass the photo as a request paramenter called `file`.
+
 
 <h1 align = "center">  Admin Endpoints </h1> <br>
 
