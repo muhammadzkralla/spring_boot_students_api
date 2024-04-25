@@ -11,9 +11,9 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 > • The JWT access token must be valid and not expired, if it is expired, you should request to refresh token or login again. <br> <br>
 > • All Admin Endpoints must be called ONLY by Admin users. If a Student or a Teacher tries to make an admin request,
 >  they will receive a 403 Forbidden Response. <br> <br>
-> • All Teacher Endpoints must be called ONLY by Teacher users. If a Student or an Admin tries to make an admin request,
+> • All Teacher Endpoints must be called ONLY by Teacher users. If a Student or an Admin tries to make a Teacher request,
 >  they will receive a 403 Forbidden Response. <br> <br>
-> • All Student Endpoints must be called ONLY by Student users. If a Teacher or an Admin tries to make an admin request,
+> • All Student Endpoints must be called ONLY by Student users. If a Teacher or an Admin tries to make a Student request,
 >  they will receive a 403 Forbidden Response. <br> <br>
 
 <h1 align = "center">  Authentication Endpoints </h1> <br>
@@ -166,7 +166,7 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 
 - **Endpoint:** `/api/users`
 - **Method:** `GET`
-- **Response Body:** list of users
+- **Response Body:** `list of users`
 
 <h2 align = "center">  Get a Certain User </h2>
 
@@ -333,7 +333,7 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 
 <h1 align = "center">  Admin Endpoints </h1> <br>
 
-> **Note:** All Admin Endpoints must be called ONLY by Admin users. If a Student or a Teacher tries to make an admin request, you'll receive a 403 Forbidden Response. 
+> **Note:** All Admin Endpoints must be called ONLY by Admin users. If a Student or a Teacher tries to make an Admin request, they will receive a 403 Forbidden Response. 
 
 <h2 align = "center">  Create a Class </h2>
 
@@ -495,4 +495,179 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 ```
 
 <br><hr>
+
+<h1 align = "center">  Student Endpoints </h1> <br>
+
+> **Note:** All Student Endpoints must be called ONLY by Student users. If an Admin or a Teacher tries to make an Student request, they will receive a 403 Forbidden Response. 
+
+<h2 align = "center">  Create a User's Request to Join a Class </h2>
+
+- **Endpoint:** `/api/student/request/{userId}/to/{classId}`
+- **Method:** `POST`
+- **Response Body:**
+```json
+{
+    "id": 2,
+    "user": {
+        "id": 4,
+        "email": "email@gmail.com",
+        "password": "$2a$10$TjkvfMLHNwdKRWZCAXv2aeeScyKKxlQGypV5e4GMaDcgjRJxIVKEe",
+        "firstName": "John",
+        "lastName": "Doe",
+        "imageUrl": null,
+        "createdAt": "2024-04-23T21:17:08.051+00:00",
+        "dob": null,
+        "code": 390132,
+        "codeExpiredAt": "2024-04-24T21:24:36.604+00:00",
+        "enabled": true,
+        "emailVerified": true,
+        "username": "email@gmail.com",
+        "accountNonLocked": true,
+        "authorities": [
+            {
+                "id": 1,
+                "name": "ADMIN",
+                "authority": "ADMIN"
+            }
+        ],
+        "accountNonExpired": true,
+        "credentialsNonExpired": true
+    },
+    "requestedClass": {
+        "id": 1,
+        "name": "Class1",
+        "description": "This is the description for Class1."
+    },
+    "status": "WAITING",
+    "timestamp": "2024-04-25T02:58:13.973+00:00"
+}
+```
+
+<h2 align = "center">  Create a User's Submission to a Task </h2>
+
+- **Endpoint:** `/api/students/submit/{userId}/{taskId}`
+- **Method:** `POST`
+- **Request Body:**
+```json
+{
+    "link": "github.com/muhammadzkrallaah",
+    "additional": null,
+    "grade": 0
+}
+```
+- **Response Body:**
+```json
+{
+    "id": 1,
+    "task": {
+        "id": 1,
+        "title": "Task3",
+        "description": "description3",
+        "due": "0023-10-14T22:00:00.000+00:00",
+        "sources": [],
+        "targetedClass": {
+            "id": 1,
+            "name": "Class1",
+            "description": "This is the description for Class1."
+        }
+    },
+    "user": {
+        "id": 1,
+        "email": "muhammad.hesham442@gmail.com",
+        "password": "$2a$10$ZsfxMKPoptP4HhoLGEXnauwU0v5mbM949q9zYM.ulrrO.zuhsj7Te",
+        "firstName": "Muhammad",
+        "lastName": "zkrallah",
+        "imageUrl": "https://firebasestorage.googleapis.com/v0/b/spring-students-system.appspot.com/o/a163d0ea-2c1f-413c-b65f-217a23d78fb6.jpeg?alt=media",
+        "createdAt": "2024-04-18T17:11:41.016+00:00",
+        "dob": null,
+        "code": 257199,
+        "codeExpiredAt": "2024-04-19T17:11:41.016+00:00",
+        "enabled": true,
+        "emailVerified": true,
+        "username": "muhammad.hesham442@gmail.com",
+        "accountNonLocked": true,
+        "authorities": [
+            {
+                "id": 1,
+                "name": "ADMIN",
+                "authority": "ADMIN"
+            }
+        ],
+        "accountNonExpired": true,
+        "credentialsNonExpired": true
+    },
+    "grade": 0,
+    "additional": null,
+    "link": "github.com/muhammadzkrallaah"
+}
+```
+
+<h2 align = "center">  Get a User's Submission </h2>
+
+- **Endpoint:** `/api/students/submission/{submissionId}`
+- **Method:** `GET`
+- **Response Body:**
+```json
+{
+    "id": 1,
+    "task": {
+        "id": 1,
+        "title": "Task3",
+        "description": "description3",
+        "due": "0023-10-14T22:00:00.000+00:00",
+        "sources": [],
+        "targetedClass": {
+            "id": 1,
+            "name": "Class1",
+            "description": "This is the description for Class1."
+        }
+    },
+    "user": {
+        "id": 1,
+        "email": "muhammad.hesham442@gmail.com",
+        "password": "$2a$10$ZsfxMKPoptP4HhoLGEXnauwU0v5mbM949q9zYM.ulrrO.zuhsj7Te",
+        "firstName": "Muhammad",
+        "lastName": "zkrallah",
+        "imageUrl": "https://firebasestorage.googleapis.com/v0/b/spring-students-system.appspot.com/o/a163d0ea-2c1f-413c-b65f-217a23d78fb6.jpeg?alt=media",
+        "createdAt": "2024-04-18T17:11:41.016+00:00",
+        "dob": null,
+        "code": 257199,
+        "codeExpiredAt": "2024-04-19T17:11:41.016+00:00",
+        "enabled": true,
+        "emailVerified": true,
+        "username": "muhammad.hesham442@gmail.com",
+        "accountNonLocked": true,
+        "authorities": [
+            {
+                "id": 1,
+                "name": "ADMIN",
+                "authority": "ADMIN"
+            }
+        ],
+        "accountNonExpired": true,
+        "credentialsNonExpired": true
+    },
+    "grade": 0,
+    "additional": null,
+    "link": "github.com/muhammadzkrallaah"
+}
+```
+
+<h2 align = "center">  Get all User's Submissions </h2>
+
+- **Endpoint:** `/api/students/user/{userId}/submissions"`
+- **Method:** `GET`
+- **Response Body:** `list of all user's submissions.`
+
+  <h2 align = "center">  Delete a User's Submission </h2>
+
+- **Endpoint:** `/api/students/user/{userId}/submissions"`
+- **Method:** `DELETE`
+- **Response Body:**
+```json
+{
+    "message": "Submission Deleted Successfully!"
+}
+```
+  
 
