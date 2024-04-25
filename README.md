@@ -653,7 +653,7 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 }
 ```
 
-<h2 align = "center">  Get all User's Submissions </h2>
+<h2 align = "center">  Get Submissions of a User </h2>
 
 - **Endpoint:** `/api/students/user/{userId}/submissions"`
 - **Method:** `GET`
