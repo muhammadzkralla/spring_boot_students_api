@@ -18,7 +18,7 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 
 <h1 align = "center">  Authentication Endpoints </h1> <br>
 
-#### Register User
+<h2 align = "center">  Register User </h2>
 
 - **Endpoint:** `/api/auth/admin/signup`
 - **Method:** `POST`
@@ -31,7 +31,7 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
     "lastName": "Doe"
 }
 ```
-- **Response Body**
+- **Response Body:**
 ```json
 {
     "id": 4,
@@ -62,7 +62,7 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 
 > **Note:** You can change the role in the endpoint from admin to student to register as a student or to teacher to register as a teacher.
 
-#### Regenerate Verification Code
+<h2 align = "center">  Regenerate Verification Code </h2>
 
 - **Endpoint:** `/api/auth/regenerate-code`
 - **Method:** `POST`
@@ -72,14 +72,14 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
     "email": "email@gmail.com"
 }
 ```
-- **Response Body**
+- **Response Body:**
 ```json
 {
     "message": "OTP regenerated successfully. Check your email for the new OTP."
 }
 ```
 
-#### Verify Code
+<h2 align = "center">  Verify Code </h2>
 
 - **Endpoint:** `/api/auth/verify-code`
 - **Method:** `POST`
@@ -90,7 +90,7 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
     "code": "390132"
 }
 ```
-- **Response Body**
+- **Response Body:**
 ```json
 {
     "message": "Account Verified Successfully!"
@@ -100,7 +100,7 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 > **Note:** The OTP code is sent to the user via email. <br>
 > **Note:** No User of any role (Admin, Teacher, or Student) would be able to do any request if they did not verify their account.
 
-#### Login
+<h2 align = "center">  Login </h2>
 
 - **Endpoint:** `/api/auth/login`
 - **Method:** `POST`
@@ -111,7 +111,7 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
     "password": "password"
 }
 ```
-- **Response Body**
+- **Response Body:**
 ```json
 {
     "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlbWFpbEBnbWFpbC5jb20iLCJpYXQiOjE3MTM5MDc4NjEsImV4cCI6MTcxNDUxMjY2MSwicm9sZXMiOlt7ImlkIjoxLCJuYW1lIjoiQURNSU4iLCJhdXRob3JpdHkiOiJBRE1JTiJ9XSwianRpIjoiZjNiZGZmM2UtODQyMS00OTExLWE3NWUtZmRkYTUwMjc4MmFiIn0.WdU93H9q0mDeFosjb2Ego1od6EhvYHWtiBs38cR9Bsn8Lv92W6Bi8t4tPCkSMp0w4DQ0Z-rpNtrgCFHRnbZVKw",
@@ -121,11 +121,11 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 }
 ```
 
-#### Token Refresh
+<h2 align = "center">  Token Refresh </h2>
 
 - **Endpoint:** `/api/auth/token-refresh`
 - **Method:** `GET`
-- **Response Body**
+- **Response Body:**
 ```json
 {
     "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlbWFpbEBnbWFpbC5jb20iLCJpYXQiOjE3MTM5MDc5NDgsImV4cCI6MTcxNDUxMjc0OCwicm9sZXMiOlt7ImlkIjoxLCJuYW1lIjoiQURNSU4iLCJhdXRob3JpdHkiOiJBRE1JTiJ9XSwianRpIjoiMjY0MGI0ZGMtMTYzZC00ZTlkLWFlNzUtMjVhZDU1YjUyMmMxIn0.proWULrXuFrluTGlrp0tLbc8yX4G6hRMtlT81jDdyjFm2JVsLdawqtL-57eoQODoa1U6hCzEsNkJ9V4pWVDwtw",
@@ -137,11 +137,11 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 
 > **Note:** The refresh token must be provided in the request header to receive the response.
 
-#### Reset Password
+<h2 align = "center">  Reset Password </h2>
 
 - **Endpoint:** `/api/auth/reset-password`
 - **Method:** `POST`
-- - **Request Body:**
+- **Request Body:**
 ```json
 {
     "email": "email@gmail.com",
@@ -149,7 +149,7 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
     "code": "390132"
 }
 ```
-- **Response Body**
+- **Response Body:**
 ```json
 {
     "message": "Password Reset Successfully!"
@@ -162,17 +162,17 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 
 <h1 align = "center">  User Endpoints </h1> <br>
 
-#### Get All Users
+<h2 align = "center">  Get All Users </h2>
 
 - **Endpoint:** `/api/users`
 - **Method:** `GET`
 - **Response Body:** list of users
 
-#### Get a Certain User
+<h2 align = "center">  Get a Certain User </h2>
 
 - **Endpoint:** `/api/users/{userId}`
 - **Method:** `GET`
-- **Response Body**
+- **Response Body:**
 ```json
 {
     "id": 1,
@@ -201,11 +201,11 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 }
 ```
 
-#### Get Classes of a User
+<h2 align = "center">  Get Classes of a User </h2>
 
 - **Endpoint:** `/api/users/{userId}/classes`
 - **Method:** `GET`
-- **Response Body**
+- **Response Body:**
 ```json
 [
     {
@@ -231,7 +231,7 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 ]
 ```
 
-#### Update User
+<h2 align = "center">  Update a User </h2>
 
 - **Endpoint:** `/api/admin/update-class/{classId}`
 - **Method:** `PUT`
@@ -243,7 +243,7 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
     "dob": "22-2-2004"
 }
 ```
-- **Response Body**
+- **Response Body:**
 ```json
 {
     "id": 2,
@@ -272,11 +272,11 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 }
 ```
 
-#### Get Requests of a User
+<h2 align = "center">  Get Requests of a User </h2>
 
 - **Endpoint:** `/api/users/{userId}/requests`
 - **Method:** `GET`
-- **Response Body**
+- **Response Body:**
 ```json
 [
     {
@@ -317,11 +317,11 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 ]
 ```
 
-#### Upload Profile Photo
+<h2 align = "center">  Upload Profile Photo </h2>
 
 - **Endpoint:** `/api/users/{userId}/upload-image`
 - **Method:** `POST`
-- **Response Body**
+- **Response Body:**
 ```json
 {
     "message": "https://firebasestorage.googleapis.com/v0/b/spring-students-system.appspot.com/o/a163d0ea-2c1f-413c-b65f-217a23d78fb6.jpeg?alt=media"
@@ -333,9 +333,9 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 
 <h1 align = "center">  Admin Endpoints </h1> <br>
 
-> **Note:** All Admin Endpoints must be called ONLY by Admin users. If a Student or a Teacher tries to do an admin request, you'll receive a 403 Forbidden Response. 
+> **Note:** All Admin Endpoints must be called ONLY by Admin users. If a Student or a Teacher tries to make an admin request, you'll receive a 403 Forbidden Response. 
 
-#### Create Class
+<h2 align = "center">  Create a Class </h2>
 
 - **Endpoint:** `/api/admin/create-class`
 - **Method:** `POST`
@@ -346,7 +346,7 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
     "description": "This is the description for The Class."
 }
 ```
-- **Response Body**
+- **Response Body:**
 ```json
 {
     "id": 4,
@@ -355,9 +355,7 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 }
 ```
 
-> **Note:** An Admin token must be provided in the request header to receive the response.
-
-#### Update Class
+<h2 align = "center">  Update a Class </h2>
 
 - **Endpoint:** `/api/admin/update-class/{classId}`
 - **Method:** `PUT`
@@ -368,7 +366,7 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
     "description": "This is the modified description for class4"
 }
 ```
-- **Response Body**
+- **Response Body:**
 ```json
 {
     "id": 4,
@@ -377,52 +375,44 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 }
 ```
 
-> **Note:** An Admin token must be provided in the request header to receive the response.
-
-#### Delete Class
+<h2 align = "center">  Delete a Class </h2>
 
 - **Endpoint:** `/api/admin/delete-class/{classId}`
 - **Method:** `DELETE`
-- **Response Body**
+- **Response Body:**
 ```json
 {
     "message": "Class Deleted Successfully!"
 }
 ```
 
-> **Note:** An Admin token must be provided in the request header to receive the response.
-
-#### Add a User to a Class
+<h2 align = "center">  Add a User to a Class </h2>
 
 - **Endpoint:** `/api/admin/add/{userId}/to/{classId}`
 - **Method:** `GET`
-- **Response Body**
+- **Response Body:**
 ```json
 {
     "message": "User Added to Class."
 }
 ```
 
-> **Note:** An Admin token must be provided in the request header to receive the response.
-
-#### Remove a User from a Class
+<h2 align = "center">  Remove a User from a Class </h2>
 
 - **Endpoint:** `/api/admin/remove/{userId}/from/{classId}`
 - **Method:** `GET`
-- **Response Body**
+- **Response Body:**
 ```json
 {
     "message": "User Removed from Class.."
 }
 ```
 
-> **Note:** An Admin token must be provided in the request header to receive the response.
-
-#### Approve User Request
+<h2 align = "center">  Approve a User's Request </h2>
 
 - **Endpoint:** `/api/admin/approve-request/{requestId}`
 - **Method:** `PUT`
-- **Response Body**
+- **Response Body:**
 ```json
 {
     "id": 1,
@@ -461,13 +451,11 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 }
 ```
 
-> **Note:** An Admin token must be provided in the request header to receive the response.
-
-#### Decline User Request
+<h2 align = "center">  Decline a User's Request </h2>
 
 - **Endpoint:** `/api/admin/decline-request/{requestId}`
 - **Method:** `PUT`
-- **Response Body**
+- **Response Body:**
 ```json
 {
     "id": 1,
@@ -505,8 +493,6 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
     "timestamp": "2024-04-24T01:22:27.698+00:00"
 }
 ```
-
-> **Note:** An Admin token must be provided in the request header to receive the response.
 
 <br><hr>
 
