@@ -2,6 +2,7 @@ package com.zkrallah.students_api.controller;
 
 import com.zkrallah.students_api.dtos.AnnouncementDto;
 import com.zkrallah.students_api.dtos.SourceDto;
+import com.zkrallah.students_api.dtos.SubmissionDto;
 import com.zkrallah.students_api.dtos.TaskDto;
 import com.zkrallah.students_api.entity.Announcement;
 import com.zkrallah.students_api.entity.Source;
@@ -207,6 +208,20 @@ public class TeacherController {
         } catch (Exception e) {
             return ResponseEntity.badRequest()
                     .body(createFailureResponse("Could not get submissions: " + e.getMessage()));
+        }
+    }
+
+    @PutMapping("/update-submission/{submissionId}")
+    public ResponseEntity<ApiResponse<Submission>> updateSubmission(
+            @PathVariable Long submissionId,
+            @RequestBody SubmissionDto submissionDto
+    ) {
+        try {
+            Submission submission = submissionService.updateSubmission(submissionId, submissionDto);
+            return ResponseEntity.ok(createSuccessResponse(submission));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(createFailureResponse("Could not update submission: " + e.getMessage()));
         }
     }
 

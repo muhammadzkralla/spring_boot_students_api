@@ -78,20 +78,6 @@ public class StudentController {
         }
     }
 
-    @PutMapping("/update-submission/{submissionId}")
-    public ResponseEntity<ApiResponse<Submission>> updateSubmission(
-            @PathVariable Long submissionId,
-            @RequestBody SubmissionDto submissionDto
-    ) {
-        try {
-            Submission submission = submissionService.updateSubmission(submissionId, submissionDto);
-            return ResponseEntity.ok(createSuccessResponse(submission));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(createFailureResponse("Could not update submission: " + e.getMessage()));
-        }
-    }
-
     @DeleteMapping("/delete-submission/{submissionId}")
     public ResponseEntity<ApiResponse<MessageResponse>> deleteSubmission(@PathVariable Long submissionId) {
         try {
