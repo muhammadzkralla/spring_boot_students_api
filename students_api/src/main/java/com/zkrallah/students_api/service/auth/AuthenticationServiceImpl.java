@@ -120,10 +120,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private LoginResponse createLoginResponse(String accessToken, String refreshToken) {
         LoginResponse loginResponse = new LoginResponse();
+        String email = jwtService.getEmailFromToken(accessToken);
+        User user = userService.getUser(email).orElseThrow(() -> new NoSuchElementException("User not found"));
+
         loginResponse.setAccessToken(accessToken);
         loginResponse.setRefreshToken(refreshToken);
         loginResponse.setAccessTokenExpiresIn(jwtService.extractExpiration(accessToken));
         loginResponse.setRefreshTokenExpiresIn(jwtService.extractExpiration(refreshToken));
+        loginResponse.setUser(user);
+
         return loginResponse;
     }
 

@@ -4,14 +4,17 @@ import com.zkrallah.students_api.dtos.CreateClassDto;
 import com.zkrallah.students_api.dtos.UpdateClassDto;
 import com.zkrallah.students_api.entity.Class;
 import com.zkrallah.students_api.entity.Request;
+import com.zkrallah.students_api.response.ApiResponse;
 import com.zkrallah.students_api.response.MessageResponse;
 import com.zkrallah.students_api.service.classes.ClassService;
 import com.zkrallah.students_api.service.request.RequestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import static com.zkrallah.students_api.response.ApiResponse.createFailureResponse;
+import static com.zkrallah.students_api.response.ApiResponse.createSuccessResponse;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -23,85 +26,92 @@ public class AdminController {
     private final RequestService requestService;
 
     @PostMapping("/create-class")
-    public ResponseEntity<?> createClass(
+    public ResponseEntity<ApiResponse<Class>> createClass(
             @RequestBody CreateClassDto createClassDto,
             @RequestHeader("Authorization") String authorizationHeader
     ) {
         try {
             Class createdClass = classService.createClass(createClassDto, authorizationHeader);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(createdClass);
+            return ResponseEntity.status(CREATED)
+                    .body(createSuccessResponse(createdClass));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MessageResponse("Failed to create class: " + e.getMessage()));
+            return ResponseEntity.badRequest()
+                    .body(createFailureResponse("Failed to create class: " + e.getMessage()));
         }
     }
 
     @PutMapping("/update-class/{classId}")
-    public ResponseEntity<?> updateClass(@PathVariable Long classId, @RequestBody UpdateClassDto updateClassDto) {
+    public ResponseEntity<ApiResponse<Class>> updateClass(
+            @PathVariable Long classId,
+            @RequestBody UpdateClassDto updateClassDto
+    ) {
         try {
             Class _class = classService.updateClass(classId, updateClassDto);
-            return ResponseEntity.ok(_class);
+            return ResponseEntity.ok(createSuccessResponse(_class));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new MessageResponse("Could not update class: " + e.getMessage()));
+            return ResponseEntity.badRequest()
+                    .body(createFailureResponse("Could not update class: " + e.getMessage()));
         }
     }
 
     @DeleteMapping("/delete-class/{classId}")
-    public ResponseEntity<?> removeClass(@PathVariable Long classId) {
+    public ResponseEntity<ApiResponse<MessageResponse>> removeClass(@PathVariable Long classId) {
         try {
             classService.removeClass(classId);
-            return ResponseEntity.ok(new MessageResponse("Class Deleted Successfully!"));
+            return ResponseEntity.ok(createSuccessResponse(new MessageResponse("Class Deleted Successfully!")));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MessageResponse("Could not delete class: " + e.getMessage()));
+            return ResponseEntity.badRequest()
+                    .body(createFailureResponse("Could not delete class: " + e.getMessage()));
         }
     }
 
     @GetMapping("/add/{userId}/to/{classId}")
-    public ResponseEntity<?> addUserToClass(@PathVariable Long userId, @PathVariable Long classId) {
+    public ResponseEntity<ApiResponse<MessageResponse>> addUserToClass(
+            @PathVariable Long userId,
+            @PathVariable Long classId
+    ) {
         try {
             classService.addUserToClass(userId, classId);
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new MessageResponse("User Added to Class."));
+            return ResponseEntity.ok(createSuccessResponse(new MessageResponse("User Added to Class.")));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MessageResponse("Failed to add user to class: " + e.getMessage()));
+            return ResponseEntity.badRequest()
+                    .body(createFailureResponse("Failed to add user to class: " + e.getMessage()));
         }
     }
 
     @GetMapping("/remove/{userId}/from/{classId}")
-    public ResponseEntity<?> removeUserFromClass(@PathVariable Long userId, @PathVariable Long classId) {
+    public ResponseEntity<ApiResponse<MessageResponse>> removeUserFromClass(
+            @PathVariable Long userId,
+            @PathVariable Long classId
+    ) {
         try {
             classService.removeUserFromClass(userId, classId);
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new MessageResponse("User Removed from Class.."));
+            return ResponseEntity.ok(createSuccessResponse(new MessageResponse("User Removed from Class..")));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MessageResponse("Failed to remove user from class: " + e.getMessage()));
+            return ResponseEntity.badRequest()
+                    .body(createFailureResponse("Failed to remove user from class: " + e.getMessage()));
         }
     }
 
     @PutMapping("/approve-request/{requestId}")
-    public ResponseEntity<?> approveRequest(@PathVariable Long requestId) {
+    public ResponseEntity<ApiResponse<Request>> approveRequest(@PathVariable Long requestId) {
         try {
             Request request = requestService.approveRequest(requestId);
-            return ResponseEntity.ok(request);
+            return ResponseEntity.ok(createSuccessResponse(request));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MessageResponse("Failed to approve request: " + e.getMessage()));
+            return ResponseEntity.badRequest()
+                    .body(createFailureResponse("Failed to approve request: " + e.getMessage()));
         }
     }
 
     @PutMapping("/decline-request/{requestId}")
-    public ResponseEntity<?> declineRequest(@PathVariable Long requestId) {
+    public ResponseEntity<ApiResponse<Request>> declineRequest(@PathVariable Long requestId) {
         try {
             Request request = requestService.declineRequest(requestId);
-            return ResponseEntity.ok(request);
+            return ResponseEntity.ok(createSuccessResponse(request));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MessageResponse("Failed to decline request: " + e.getMessage()));
+            return ResponseEntity.badRequest()
+                    .body(createFailureResponse("Failed to decline request: " + e.getMessage()));
         }
     }
 
