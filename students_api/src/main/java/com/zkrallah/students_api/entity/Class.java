@@ -40,4 +40,11 @@ public class Class {
     @JsonIgnore
     @OneToMany(mappedBy = "targetedClass")
     private Set<Task> tasks = new HashSet<>();
+
+    @Transient
+    private int numberOfUsers;
+
+    public int getNumberOfUsers() {
+        return users.size();
+    }
 }
