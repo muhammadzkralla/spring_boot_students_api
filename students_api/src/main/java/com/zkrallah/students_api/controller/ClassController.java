@@ -1,13 +1,12 @@
 package com.zkrallah.students_api.controller;
 
-import com.zkrallah.students_api.entity.Announcement;
+import com.zkrallah.students_api.entity.*;
 import com.zkrallah.students_api.entity.Class;
-import com.zkrallah.students_api.entity.Request;
-import com.zkrallah.students_api.entity.User;
 import com.zkrallah.students_api.response.ApiResponse;
 import com.zkrallah.students_api.service.announcement.AnnouncementService;
 import com.zkrallah.students_api.service.classes.ClassService;
 import com.zkrallah.students_api.service.request.RequestService;
+import com.zkrallah.students_api.service.task.TaskService;
 import com.zkrallah.students_api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +30,7 @@ public class ClassController {
     private final RequestService requestService;
     private final AnnouncementService announcementService;
     private final UserService userService;
+    private final TaskService taskService;
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<Class>>> getClasses() {
@@ -78,6 +78,17 @@ public class ClassController {
         } catch (Exception e) {
             return ResponseEntity.badRequest()
                     .body(createFailureResponse("Could not get class's announcements: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/{classId}/tasks")
+    public ResponseEntity<ApiResponse<Set<Task>>> getTasksInClass(@PathVariable Long classId) {
+        try {
+            Set<Task> tasks = taskService.getTasksInClass(classId);
+            return ResponseEntity.ok(createSuccessResponse(tasks));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(createFailureResponse("Could not get tasks: " + e.getMessage()));
         }
     }
 }

@@ -91,17 +91,6 @@ public class TeacherController {
         }
     }
 
-    @GetMapping("/class/{classId}/tasks")
-    public ResponseEntity<ApiResponse<Set<Task>>> getTasksInClass(@PathVariable Long classId) {
-        try {
-            Set<Task> tasks = taskService.getTasksInClass(classId);
-            return ResponseEntity.ok(createSuccessResponse(tasks));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(createFailureResponse("Could not get tasks: " + e.getMessage()));
-        }
-    }
-
     @GetMapping("/task/{taskId}")
     public ResponseEntity<ApiResponse<Task>> getTask(@PathVariable Long taskId) {
         try {
