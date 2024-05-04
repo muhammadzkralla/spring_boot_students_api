@@ -33,10 +33,12 @@ public class Task {
     private Timestamp due;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("id ASC")
     private Set<Source> sources = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("id ASC")
     private Set<Submission> submissions = new HashSet<>();
 
     @ManyToOne

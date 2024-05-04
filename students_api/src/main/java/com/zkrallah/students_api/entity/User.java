@@ -61,6 +61,7 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
+    @OrderBy("id ASC")
     private Set<Role> roles = new HashSet<>();
 
     @JsonIgnore
@@ -70,14 +71,17 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "class_id")
     )
+    @OrderBy("id ASC")
     private Set<Class> classes = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("id ASC")
     private Set<Request> requests = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("id ASC")
     private Set<Submission> submissions = new HashSet<>();
 
     @Override

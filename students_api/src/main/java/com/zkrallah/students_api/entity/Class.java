@@ -27,18 +27,22 @@ public class Class {
 
     @JsonIgnore
     @ManyToMany(mappedBy = "classes")
+    @OrderBy("id ASC")
     private Set<User> users = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "requestedClass")
+    @OrderBy("id ASC")
     private Set<Request> requests = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "targetedClass")
+    @OrderBy("id ASC")
     private Set<Announcement> announcements = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "targetedClass")
+    @OrderBy("id ASC")
     private Set<Task> tasks = new HashSet<>();
 
     @Transient
