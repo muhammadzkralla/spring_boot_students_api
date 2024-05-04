@@ -21,6 +21,7 @@ import java.util.Set;
 
 import static com.zkrallah.students_api.response.ApiResponse.createFailureResponse;
 import static com.zkrallah.students_api.response.ApiResponse.createSuccessResponse;
+import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequiredArgsConstructor
@@ -81,6 +82,21 @@ public class UsersController {
         } catch (Exception e) {
             return ResponseEntity.badRequest()
                     .body(createFailureResponse("Could not get user's requests: " + e.getMessage()));
+        }
+    }
+
+    @PostMapping("/request/{userId}/to/{classId}")
+    public ResponseEntity<ApiResponse<Request>> requestUserToClass(
+            @PathVariable Long userId,
+            @PathVariable Long classId
+    ) {
+        try {
+            Request request = requestService.createRequest(userId, classId);
+            return ResponseEntity.status(CREATED)
+                    .body(createSuccessResponse(request));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(createFailureResponse("Could not create request: " + e.getMessage()));
         }
     }
 

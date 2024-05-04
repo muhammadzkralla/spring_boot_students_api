@@ -22,23 +22,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RequestMapping("/api/students")
 public class StudentController {
 
-    private final RequestService requestService;
     private final SubmissionService submissionService;
-
-    @PostMapping("/request/{userId}/to/{classId}")
-    public ResponseEntity<ApiResponse<Request>> requestUserToClass(
-            @PathVariable Long userId,
-            @PathVariable Long classId
-    ) {
-        try {
-            Request request = requestService.createRequest(userId, classId);
-            return ResponseEntity.status(CREATED)
-                    .body(createSuccessResponse(request));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(createFailureResponse("Could not create request: " + e.getMessage()));
-        }
-    }
 
     @PostMapping("/submit/{userId}/{taskId}")
     public ResponseEntity<ApiResponse<Submission>> createSubmission(

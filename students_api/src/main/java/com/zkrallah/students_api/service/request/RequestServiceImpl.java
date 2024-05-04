@@ -30,7 +30,7 @@ public class RequestServiceImpl implements RequestService{
         Class requestedClass = classService.getClassById(classID);
         Optional<Request> request = requestRepository.findByUserAndRequestedClass(user, requestedClass);
         if (request.isPresent()) {
-            throw new IllegalStateException("Request Already Exists!");
+            throw new IllegalStateException("Request to " + requestedClass.getName() + " Already Exists!");
         }
 
         return requestRepository.save(createNewRequest(user, requestedClass));
