@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,7 +30,7 @@ public class Task {
     private String description;
 
     @Column(nullable = false)
-    private Timestamp due;
+    private Date due;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("id ASC")

@@ -9,7 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -31,7 +31,7 @@ public class TaskServiceImpl implements TaskService{
 
         task.setTitle(taskDto.getTitle());
         task.setDescription(taskDto.getDescription());
-        task.setDue(new Timestamp(simpleDateFormat.parse(taskDto.getDue()).getTime()));
+        task.setDue(new Date(simpleDateFormat.parse(taskDto.getDue()).getTime()));
         task.setTargetedClass(_class);
 
         return taskRepository.save(task);
@@ -46,7 +46,7 @@ public class TaskServiceImpl implements TaskService{
 
         task.setTitle(taskDto.getTitle());
         task.setDescription(taskDto.getDescription());
-        task.setDue(new Timestamp(simpleDateFormat.parse(taskDto.getDue()).getTime()));
+        task.setDue(new Date(simpleDateFormat.parse(taskDto.getDue()).getTime()));
 
         return task;
     }
