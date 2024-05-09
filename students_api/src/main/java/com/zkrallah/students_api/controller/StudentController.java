@@ -1,16 +1,15 @@
 package com.zkrallah.students_api.controller;
 
 import com.zkrallah.students_api.dtos.SubmissionDto;
-import com.zkrallah.students_api.entity.Request;
 import com.zkrallah.students_api.entity.Submission;
 import com.zkrallah.students_api.response.ApiResponse;
 import com.zkrallah.students_api.response.MessageResponse;
-import com.zkrallah.students_api.service.request.RequestService;
 import com.zkrallah.students_api.service.submission.SubmissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 import static com.zkrallah.students_api.response.ApiResponse.createFailureResponse;
@@ -44,6 +43,20 @@ public class StudentController {
     public ResponseEntity<ApiResponse<Submission>> getSubmission(@PathVariable Long submissionId) {
         try {
             Submission submission = submissionService.getSubmission(submissionId);
+            return ResponseEntity.ok(createSuccessResponse(submission));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(createFailureResponse("Could not get submission: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/submissions/{taskId}/{userId}")
+    public ResponseEntity<ApiResponse<List<Submission>>> getUserTaskSubmission(
+            @PathVariable Long taskId,
+            @PathVariable Long userId
+    ) {
+        try {
+            List<Submission> submission = submissionService.getUserTaskSubmissions(taskId, userId);
             return ResponseEntity.ok(createSuccessResponse(submission));
         } catch (Exception e) {
             return ResponseEntity.badRequest()

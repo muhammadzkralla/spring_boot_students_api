@@ -20,4 +20,6 @@ public interface SubmissionService {
     Set<Submission> getUserSubmissions(Long userId);
 
     Set<Submission> getTaskSubmissions(Long taskId);
+
+    List<Submission> getUserTaskSubmissions(Long taskId, Long userId);
 }

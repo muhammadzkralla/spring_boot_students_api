@@ -91,17 +91,6 @@ public class TeacherController {
         }
     }
 
-    @GetMapping("/task/{taskId}")
-    public ResponseEntity<ApiResponse<Task>> getTask(@PathVariable Long taskId) {
-        try {
-            Task task = taskService.getTask(taskId);
-            return ResponseEntity.ok(createSuccessResponse(task));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(createFailureResponse("Could not get task: " + e.getMessage()));
-        }
-    }
-
     @PutMapping("/update-task/{taskId}")
     public ResponseEntity<ApiResponse<Task>> updateTask(
             @PathVariable Long taskId,

@@ -3,12 +3,14 @@ package com.zkrallah.students_api.controller;
 import com.zkrallah.students_api.dtos.UpdateUserDto;
 import com.zkrallah.students_api.entity.Class;
 import com.zkrallah.students_api.entity.Request;
+import com.zkrallah.students_api.entity.Task;
 import com.zkrallah.students_api.entity.User;
 import com.zkrallah.students_api.response.ApiResponse;
 import com.zkrallah.students_api.response.MessageResponse;
 import com.zkrallah.students_api.service.classes.ClassService;
 import com.zkrallah.students_api.service.request.RequestService;
 import com.zkrallah.students_api.service.storage.StorageService;
+import com.zkrallah.students_api.service.task.TaskService;
 import com.zkrallah.students_api.service.user.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,7 @@ public class UsersController {
     private final RequestService requestService;
     private final ClassService classService;
     private final StorageService storageService;
+    private final TaskService taskService;
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<User>>> getUsers() {
@@ -115,6 +118,17 @@ public class UsersController {
         } catch (Exception e) {
             return ResponseEntity.badRequest()
                     .body(createFailureResponse("Could not upload user's image: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/task/{taskId}")
+    public ResponseEntity<ApiResponse<Task>> getTask(@PathVariable Long taskId) {
+        try {
+            Task task = taskService.getTask(taskId);
+            return ResponseEntity.ok(createSuccessResponse(task));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(createFailureResponse("Could not get task: " + e.getMessage()));
         }
     }
 }

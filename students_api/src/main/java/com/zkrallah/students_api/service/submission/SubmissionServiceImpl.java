@@ -16,7 +16,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class SubmissionServiceImpl implements SubmissionService{
+public class SubmissionServiceImpl implements SubmissionService {
 
     private final SubmissionRepository submissionRepository;
     private final TaskService taskService;
@@ -48,7 +48,7 @@ public class SubmissionServiceImpl implements SubmissionService{
         submission.setAdditional(submissionDto.getAdditional());
         submission.setGrade(submissionDto.getGrade());
 
-        return null;
+        return submission;
     }
 
     @Override
@@ -80,5 +80,14 @@ public class SubmissionServiceImpl implements SubmissionService{
     public Set<Submission> getTaskSubmissions(Long taskId) {
         Task task = taskService.getTask(taskId);
         return task.getSubmissions();
+    }
+
+    @Override
+    public List<Submission> getUserTaskSubmissions(Long taskId, Long userId) {
+        Task task = taskService.getTask(taskId);
+        User user = userService.getUserById(userId);
+
+        return submissionRepository.findByUserAndTask(user, task)
+                .orElseThrow(() -> new RuntimeException("Submission not found."));
     }
 }
