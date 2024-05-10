@@ -1,9 +1,30 @@
 # Student Management System API
 
-## Description
+## Introduction
 
-This is a RESTful API built with Spring Boot and PostgreSQL for managing students, classes, submissions, requests, and more in a student management system. <br>
+This is a RESTful API built with Spring Boot and PostgreSQL for managing students, classes, submissions, requests, and more in a student management system. <br> <br>
 
+Teachers can create classes and add tasks with resources, and students will be able to submit their solutions to the tasks after requesting to join the class and being approved, and later teachers can grade the submissions and add announcements. <br> <br>
+
+## System Design Overview
+
+![drawSQL-image-export-2024-05-10](https://github.com/muhammadzkralla/spring_boot_students_api/assets/54005330/47f7b7a8-6b88-4007-97f6-074380291761)
+
+## Installation
+
+To start using the API, you should clone the repository :
+```link
+https://github.com/muhammadzkralla/spring_boot_students_api.git
+```
+• Rename the `env` file in the resources package to `application.yml` and update it with your database credentials and environment information. <br> <br>
+
+• Refer to this [Article](https://medium.com/@poojithairosha/image-uploading-with-spring-boot-firebase-cloud-storage-e5ef2fbf942d "Article") 
+to know how to integrate your own Firebase Cloud Storage to the project. <br>
+Once you have downloaded the JSON file: <br> <br>
+1- add it under the resources package. <br>
+2- Replace the `CREDENTIALS_FILE_PATH` variable in the `StorageServiceImpl` class with the path of your JSON file.
+
+That's it, now you are good to go! Run the project in Inellij. <br> <br>
 
 > **Please Note That:**  <br> <br>
 > • Any user should be authenticated and send their JWT access token to receive a response. <br> <br>
@@ -15,6 +36,17 @@ This is a RESTful API built with Spring Boot and PostgreSQL for managing student
 >  they will receive a 403 Forbidden Response. <br> <br>
 > • All Student Endpoints must be called ONLY by Student users. If a Teacher or an Admin tries to make a Student request,
 >  they will receive a 403 Forbidden Response. <br> <br>
+
+## Api Response
+
+All The below responses are returned in a default ApiResponse format that looks like this :
+```
+{
+    "success": ,
+    "message": ,
+    "data": 
+}
+```
 
 <h1 align = "center">  Authentication Endpoints </h1> <br>
 
