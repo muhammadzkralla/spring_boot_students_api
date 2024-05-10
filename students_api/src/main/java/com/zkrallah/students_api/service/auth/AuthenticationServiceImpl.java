@@ -73,8 +73,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         User user = new User();
         Date now = new Date();
         Date codeExpiryDate = new Date(now.getTime() + 86400000);
-        System.out.println(now);
-        System.out.println(codeExpiryDate);
 
         user.setEmail(registerUserDto.getEmail());
         user.setPassword(passwordEncoder.encode(registerUserDto.getPassword()));
@@ -94,7 +92,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         int max = (int) Math.pow(10, otpLength) - 1;
 
         Random random = new Random();
-        return random.nextInt(max - min + 1) + min;
+        // return random.nextInt(max - min + 1) + min;
+        // For Testing Environment
+        return 111111;
     }
 
     @Override
@@ -181,8 +181,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         try {
             Date codeExpirationDate = new Date(codeExpiredAt.getTime());
             Date currentDate = new Date();
-            System.out.println(currentDate);
-            System.out.println(codeExpirationDate);
             return !currentDate.after(codeExpirationDate);
         } catch (Exception e) {
             log.error("Error parsing code expiration date: " + e.getMessage());
