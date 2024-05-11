@@ -31,17 +31,17 @@ public class Class {
     private Set<User> users = new HashSet<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "requestedClass")
+    @OneToMany(mappedBy = "requestedClass", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("id ASC")
     private Set<Request> requests = new HashSet<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "targetedClass")
+    @OneToMany(mappedBy = "targetedClass", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("id ASC")
     private Set<Announcement> announcements = new HashSet<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "targetedClass")
+    @OneToMany(mappedBy = "targetedClass", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("id ASC")
     private Set<Task> tasks = new HashSet<>();
 
