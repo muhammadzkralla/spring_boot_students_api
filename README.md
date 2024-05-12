@@ -1,4 +1,4 @@
-# Student Management System API
+# School Management System API
 
 ## Introduction
 
