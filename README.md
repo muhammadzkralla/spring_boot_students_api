@@ -29,7 +29,7 @@ Once you have downloaded the JSON file: <br> <br>
 1- add it under the resources package. <br>
 2- Replace the `CREDENTIALS_FILE_PATH` variable in the `StorageServiceImpl` class with the path of your JSON file.
 
-That's it, now you are good to go! Run the project in Inellij. <br> <br>
+That's it, now you are good to go! Run the project in Intellij. <br> <br>
 
 > **Please Note That:**  <br> <br>
 > • Any user should be authenticated and send their JWT access token to receive a response. <br> <br>
