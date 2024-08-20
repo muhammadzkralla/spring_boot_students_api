@@ -12,8 +12,8 @@ import com.zkrallah.students_api.service.request.RequestService;
 import com.zkrallah.students_api.service.storage.StorageService;
 import com.zkrallah.students_api.service.task.TaskService;
 import com.zkrallah.students_api.service.user.UserService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +28,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
+@Slf4j
 public class UsersController {
 
     private final UserService userService;
@@ -103,16 +104,15 @@ public class UsersController {
         }
     }
 
-    @Transactional
     @PostMapping("/{userId}/upload-image")
     public ResponseEntity<ApiResponse<MessageResponse>> upload(
             @RequestParam("file") MultipartFile multipartFile,
             @PathVariable Long userId
     ) {
         try {
-            String url = storageService.upload(multipartFile);
-            User user = userService.getUserById(userId);
-            user.setImageUrl(url);
+            log.info("Receiving request on " + Thread.currentThread().getName() + " for userId " + userId.toString());
+            String url = storageService.upload(multipartFile, userId).get();
+            log.info("Responding on " + Thread.currentThread().getName() + " for userId " + userId.toString());
 
             return ResponseEntity.ok(createSuccessResponse(new MessageResponse(url)));
         } catch (Exception e) {

@@ -2,6 +2,8 @@ package com.zkrallah.students_api.service.storage;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.concurrent.CompletableFuture;
+
 public interface StorageService {
-    String upload(MultipartFile multipartFile);
+    CompletableFuture<String> upload(MultipartFile multipartFile, Long userId);
 }

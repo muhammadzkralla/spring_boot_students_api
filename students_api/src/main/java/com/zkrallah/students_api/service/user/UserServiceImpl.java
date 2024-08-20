@@ -9,6 +9,7 @@ import com.zkrallah.students_api.service.classes.ClassService;
 import com.zkrallah.students_api.service.role.RoleService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
@@ -86,5 +88,14 @@ public class UserServiceImpl implements UserService{
         user.setDob(new Date(simpleDateFormat.parse(updateUserDto.getDob()).getTime()));
 
         return user;
+    }
+
+    @Override
+    @Transactional
+    public void updateUserPhoto(Long userId, String url) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setImageUrl(url);
+        log.info("Updated on " + Thread.currentThread().getName() + " for userId " + userId.toString());
     }
 }
