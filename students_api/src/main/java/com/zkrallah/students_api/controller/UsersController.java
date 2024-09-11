@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 import static com.zkrallah.students_api.response.ApiResponse.createFailureResponse;
 import static com.zkrallah.students_api.response.ApiResponse.createSuccessResponse;
@@ -105,20 +106,19 @@ public class UsersController {
     }
 
     @PostMapping("/{userId}/upload-image")
-    public ResponseEntity<ApiResponse<MessageResponse>> upload(
+    public CompletableFuture<ResponseEntity<ApiResponse<MessageResponse>>> upload(
             @RequestParam("file") MultipartFile multipartFile,
             @PathVariable Long userId
     ) {
-        try {
-            log.info("Receiving request on " + Thread.currentThread().getName() + " for userId " + userId.toString());
-            String url = storageService.upload(multipartFile, userId).get();
-            log.info("Responding on " + Thread.currentThread().getName() + " for userId " + userId.toString());
+        log.info("Receiving request on {} for userId {}", Thread.currentThread().getName(), userId.toString());
 
-            return ResponseEntity.ok(createSuccessResponse(new MessageResponse(url)));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(createFailureResponse("Could not upload user's image: " + e.getMessage()));
-        }
+        return storageService.upload(multipartFile, userId)
+                .thenApply(url -> {
+                    log.info("Responding on {} for userId {}", Thread.currentThread().getName(), userId);
+                    return ResponseEntity.ok(createSuccessResponse(new MessageResponse(url)));
+                })
+                .exceptionally(ex -> ResponseEntity.badRequest()
+                        .body(createFailureResponse("Could not upload user's image: " + ex.getMessage())));
     }
 
     @GetMapping("/task/{taskId}")
